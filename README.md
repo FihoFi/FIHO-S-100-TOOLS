@@ -5,6 +5,9 @@ Tools related to S-100 data model testing and product development. The aim of th
 ## Getting started?
 Currently documentation is sparse. The best way forward is to first read this README, and then check out the directory 'example'.
 
+## Install?
+The project should be straightforward to set up on any PHP- enabled webeserver. It has been developed on Apache with PHP 5.3. Simply copy all the directories to a folder under your webroot, and point your browser to a subfolder within the 'example'- directory. 
+
 ## Setup of the project
 
 1. PHP- classes reflecting basic S-100 structure (FeatureType, ComplexAttributeType etc)
