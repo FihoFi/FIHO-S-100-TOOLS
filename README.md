@@ -1,13 +1,16 @@
 # FIHO-S-100-TOOLS
 
-Tools related to S-100 data model testing and product development. The aim of this project is to create a framework for creating S-12X datastructures using a programming langage and IDE. PHP is used here, and the framework is intended for use within the Eclipse IDE. 
+Tools related to S-100 data model testing and product development. The aim of this project is to create a framework for creating S-12X datastructures using a programming langage and IDE. PHP is used here, and the framework is intended for use within the Eclipse IDE.
+
+## Getting started?
+Currently documentation is sparse. The best way forward is to first read this README, and then check out the directory 'example'.
 
 ## Setup of the project
 
-1. PHP- classes reflecting the basic features described in S-100, such as FeatureType, ComplexAttributeType etc. were made
-2. An XSL- translation of the machine-readable S-100 Feature catalog was used to re-create the datamodel as extensions to above PHP- classes
-3. Additional data-validation and product creation are made by coding using the framework and classes as regular PHP.
-4. An (extendable) printer- function is used to print out the datamodel for verification.
+1. PHP- classes reflecting basic S-100 structure (FeatureType, ComplexAttributeType etc)
+2. XSL- translation of the S-100 Feature catalog generates the datamodel as PHP- classes
+3. Additional data-validation and product creation using the framework and classes as regular PHP.
+4. A printer- function is used to print out the datamodel for verification.
 
 ## Structure of the classes in directory 'class'
 
@@ -26,7 +29,7 @@ Tools related to S-100 data model testing and product development. The aim of th
   
 ## Structure of the classes in directory 'res'
 
-The resource directory holds the XSLT- translation script that is used to tarnslate the machine-readable S100 FeatureCatalogue into PHP- classes. The result is a single PHP- file containing the data model, with suclasses, extending the classes in class- directory.  
+The resource directory holds the XSLT- translation script that is used to tarnslate the machine-readable S100 FeatureCatalogue into PHP- classes. The result is a single PHP- file containing the data model, with suclasses, extending the classes in class- directory.
 
 ## Structure of the classes in directory 'print'
 
@@ -34,6 +37,9 @@ Currently this directory holds a single PHP-file S100Printer.php with public fun
 _It is intended that these functions are encapsulated into a class later._
 The functions will accept a $class - parameter, which should refer to a CommonS100ype- based class.
 The oPrint() function of the referred class is used to retreive the data as an array.
+
+## Structure of the classes in directory 'example'
+This directory holds a working sample, using the S-127 Feature catalogue. 
 
 ## Version 0.0.1
 TBD
