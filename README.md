@@ -1,11 +1,39 @@
 # FIHO-S-100-TOOLS
-Tools related to S-100 data model testing and product development.
 
-Setup of the project;
+Tools related to S-100 data model testing and product development. The aim of this project is to create a framework for creating S-12X datastructures using a programming langage and IDE. PHP is used here, and the framework is intended for use within the Eclipse IDE. 
+
+## Setup of the project
+
 1. PHP- classes reflecting the basic features described in S-100, such as FeatureType, ComplexAttributeType etc. were made
 2. An XSL- translation of the machine-readable S-100 Feature catalog was used to re-create the datamodel as extensions to above PHP- classes
 3. Additional data-validation and product creation are made by coding using the framework and classes as regular PHP.
-4. An (extendable) printer- funciton is used to print out the datamodel for verification.
+4. An (extendable) printer- function is used to print out the datamodel for verification.
+
+## Structure of the classes in directory 'class'
+
+* **CommonS100Type** - base class for all S-100 types
+  * **SimpleAttributeType extends CommonS100Type** - basic building block of all attributes
+    * **EnumerationType extends SimpleAttributeType** - allowed enumeration values are added upon construction
+      *  **CodeListType extends EnumerationType** - functionally similar to the EnumerationType
+  * **ComplexAttributeType extends CommonS100Type** - basic container for ALL complex objects
+    * **AbstractFeatureType extends ComplexAttributeType** - Geometry added by default
+    * **AbstractInformationType extends ComplexAttributeType**- simple extension of the  ComplexAttributeType
+  * **AbstractInformationAssociation extends CommonS100Type** - simple placeholder implementation
+  * **AbstractFeatureAssociation extends CommonS100Type** - simple placeholder implementation
+  * **AbstractRole extends CommonS100Type** - simple placeholder implementation
+  * **Geometry extends CommonS100Type** - simple placeholder, holds a Geometry as WKT
+ * valueTypeValidation.php - this file holds public functions for validating SimpleValues.  
+  
+## Structure of the classes in directory 'res'
+
+The resource directory holds the XSLT- translation script that is used to tarnslate the machine-readable S100 FeatureCatalogue into PHP- classes. The result is a single PHP- file containing the data model, with suclasses, extending the classes in class- directory.  
+
+## Structure of the classes in directory 'print'
+
+Currently this directory holds a single PHP-file S100Printer.php with public functions for data output.
+_It is intended that these functions are encapsulated into a class later._
+The functions will accept a $class - parameter, which should refer to a CommonS100ype- based class.
+The oPrint() function of the referred class is used to retreive the data as an array.
 
 ## Version 0.0.1
 TBD
