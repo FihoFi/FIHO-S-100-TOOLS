@@ -1,6 +1,6 @@
 # FIHO-S-100-TOOLS
 
-Tools related to S-100 data model testing and product development. The aim of this project is to create a framework for creating S-12X datastructures using a programming langage and IDE. PHP is used here, and the framework is intended for use within the Eclipse IDE.
+Tools related to S-100 data model testing and product development. The aim of this project is to create a framework for creating S-12X datastructures using a programming langage and IDE. PHP is used here, and the framework is intended for use within the Eclipse IDE. The generated files contain PHPDoc- style comments, that provide some degree of intelligent code completion and code hinting when imported as a PHP- project in Eclipse.
 
 ## Getting started?
 Currently documentation is sparse. The best way forward is to first read this README, and then check out the directory 'example'.
