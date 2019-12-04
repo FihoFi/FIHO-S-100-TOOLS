@@ -29,7 +29,7 @@ abstract class ComplexAttributeType extends CommonS100Type
     {
         if (!$this->exists($name))
         {
-            throw(new Exception("Illegal attribute name"));
+            throw(new Exception("Illegal attribute name $name in ".get_class($this)));
         }
         
         elseif (count($this->values[$name]['values']) >= $this->values[$name]['maxOccur'])
@@ -109,7 +109,7 @@ abstract class ComplexAttributeType extends CommonS100Type
         
         if (!is_subclass_of($type, 'CommonS100Type'))
         {
-            throw new Exception("Not a valid attribute class");
+           throw new Exception("$type is not a valid attribute class");
         }
         
         $this->values[$name]['type'] = $type;

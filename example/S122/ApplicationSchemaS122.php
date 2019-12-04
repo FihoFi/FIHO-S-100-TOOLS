@@ -17,10 +17,6 @@ include (CLASS_PATH.'AbstractRole.php');
 include (CLASS_PATH.'Geometry.php');
 include (CLASS_PATH.'valueTypeValidation.php');
 
-//FIX issues manually HERE **********************************
-//Add attribute missing from generated FC
-class QualityOfTemporalVariation extends SimpleAttributeType{}
-
 //include the generated FC for S-122 
 include 'S122FC.php';
 
@@ -35,6 +31,4 @@ class S122MarineProtectedAreas extends FeatureType
         $this->addAttribute('services', 'FeatureType', 1, MAX_OCCUR );
     }
 }
-
-
 ?>

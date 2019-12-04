@@ -91,9 +91,8 @@ $traficom = createAuthority(
     array("0800", "1615"),
     null
     );
-
 	
-$ukcManagementArea->srvControl_controlAuthority = $traficom;
+$ukcManagementArea->SrvControl_controlAuthority = $traficom;
 $s127->services = $ukcManagementArea;
 
 //print the dataset using the XML-printer function

@@ -19,11 +19,11 @@ include (CLASS_PATH.'valueTypeValidation.php');
 
 //FIX issues manually HERE **********************************
 //Add attribute missing from generated FC
-class QualityOfTemporalVariation extends SimpleAttributeType{}
+//class QualityOfTemporalVariation extends SimpleAttributeType{}
 
 //include the generated FC for S-127 
-include 'FC127_generated.php';
-
+//include 'FC127_generated.php';
+include 'S127FC.php';
 //Set the value to use for undefined upper bound as in [1..*]
 define('MAX_OCCUR', 9999);
 
