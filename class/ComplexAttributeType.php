@@ -7,7 +7,7 @@
  */
 abstract class ComplexAttributeType extends CommonS100Type
 {
-    protected $values = array();
+    protected $attributes = array();
     
     public function __construct(){}
     
@@ -32,16 +32,16 @@ abstract class ComplexAttributeType extends CommonS100Type
             throw(new Exception("Illegal attribute name $name in ".get_class($this)));
         }
         
-        elseif (count($this->values[$name]['values']) >= $this->values[$name]['maxOccur'])
+        elseif (count($this->attributes[$name]['instances']) >= $this->attributes[$name]['maxOccur'])
         {
             throw(new Exception("Upper bound of array elements reached."));
         }
         
         //if object matches required type
-        elseif ($value instanceOf $this->values[$name]['type'])
+        elseif ($value instanceOf $this->attributes[$name]['type'])
         {       
             //add object to next position in array
-            $this->values[$name]['values'][] = $value;
+            $this->attributes[$name]['instances'][] = $value;
             
             //TODO: Maybe.. 
             // If added object is FeatureType or InformationType it is an association
@@ -50,7 +50,7 @@ abstract class ComplexAttributeType extends CommonS100Type
         }
         
         //if we are trying to fill in a simple value, allow values
-        elseif (new $this->values[$name]['type']() instanceOf SimpleAttributeType)
+        elseif (new $this->attributes[$name]['type']() instanceOf SimpleAttributeType)
         {
             switch(gettype($value))
             {
@@ -60,15 +60,15 @@ abstract class ComplexAttributeType extends CommonS100Type
                 case "string":
                 case "boolean":    
                     //cast value into object (object will throw exception if value not allowed)
-                    $this->values[$name]['values'][] = new $this->values[$name]['type']($value);
+                    $this->attributes[$name]['instances'][] = new $this->attributes[$name]['type']($value);
                 break;
                 default:
-                    throw(new Exception("Unable to cast ".gettype($value)." into ". $this->values[$name]['type']));
+                    throw(new Exception("Unable to cast ".gettype($value)." into ". $this->attributes[$name]['type']));
             }
         }
         else
         {
-            throw(new Exception("Cannot add wrong type of object into ".$this->values[$name]['type']));
+            throw(new Exception("Cannot add wrong type of object into ".$this->attributes[$name]['type']));
         }
     }
     
@@ -78,17 +78,17 @@ abstract class ComplexAttributeType extends CommonS100Type
     public function __get($name)
     {
         //return object if only 1 available
-        if ($this->values[$name]['maxOccur'] == 1)
-            return $this->values[$name]['values'][0];
+        if ($this->attributes[$name]['maxOccur'] == 1)
+            return $this->attributes[$name]['instances'][0];
         
         //return array,if maxOccur > 1
-        return $this->values[$name]['values'];
+        return $this->attributes[$name]['instances'];
     }
     
     //only allow specifically set attributes
     private function exists($name)
     {
-        return isset($this->values[$name]);
+        return isset($this->attributes[$name]);
     }
     
     /*
@@ -112,24 +112,40 @@ abstract class ComplexAttributeType extends CommonS100Type
            throw new Exception("$type is not a valid attribute class");
         }
         
-        $this->values[$name]['type'] = $type;
-        $this->values[$name]['minOccur'] = $minOccur;
-        $this->values[$name]['maxOccur'] = $maxOccur;
-        $this->values[$name]['values'] = array();
+        $this->attributes[$name]['name'] = $name;
+        $this->attributes[$name]['type'] = $type;
+        $this->attributes[$name]['minOccur'] = $minOccur;
+        $this->attributes[$name]['maxOccur'] = $maxOccur;
+        $this->attributes[$name]['instances'] = array();
+    }
+   
+    public function getAllAttributes()
+    {
+        //Iterate all attributes in current instance
+        foreach($this->attributes as $attribute)
+        {
+            //Validate attribute and throw exception if needed
+            $check = $this->validateAttribute($attribute['name']);
+            if (  $check != null )
+                throw new Exception($check);
+        }
+        
+        return $this->attributes;
     }
     
     //return null if everything is ok
-    private function hasProblems($k)
+    private function validateAttribute($attributeName)
     {
-        if (count($this->values[$k]['values']) < $this->values[$k]['minOccur'])
-            return "Minimum amount of value $k not set in ".get_class($this);
+        if (count($this->attributes[$attributeName]['instances']) < $this->attributes[$attributeName]['minOccur'])
+            return "Minimum amount of value $attributeName not set in ".get_class($this);
         
         return null;
     }
     
-    private function isArray($name)
+   /* 
+    private function isArrayAttribute($attributeName)
     {
-        return $this->values[$name]['maxOccur'] > 1;
+        return $this->attributes[$attributeName]['maxOccur'] > 1;
     }
     
     public function oPrint()
@@ -138,7 +154,7 @@ abstract class ComplexAttributeType extends CommonS100Type
         echo "<ul><li>".get_class($this);
         
         
-        foreach($this->values as $name=>$arr)
+        foreach($this->attributes as $name=>$arr)
         {
             //validate 
             $check = $this->hasProblems($name);
@@ -146,7 +162,7 @@ abstract class ComplexAttributeType extends CommonS100Type
                 throw new Exception($check);
                 
            echo $this->isArray($name) ? "<ul><li>".$name : '';
-           foreach($arr['values'] as $obj)
+           foreach($arr['instances'] as $obj)
                {
                    if ($obj instanceOf SimpleAttributeType)
                        echo "<ul><li>".$name . " = " . $obj->oPrint()."</ul>";
@@ -160,57 +176,75 @@ abstract class ComplexAttributeType extends CommonS100Type
         }
         echo "</ul>";
     }
-    
-    public function arrayPrint()
+    */
+                   
+    /*
+     * Recursive print of objects, atributes and values.
+     *
+     */
+                   
+                   /*
+    public function arrayPrint($parentAttributeName = null)
     {
-        
-       $array = array();
-       $baseName = get_class($this);
-        foreach($this->values as $name=>$arr)
+       $outputArray = array();
+       $thisName = get_class($this);
+      
+       
+       //Iterate all attributes in current instance
+        foreach($this->attributes as $attributeName=>$attribute)
         {
-            //validate
-            $check = $this->hasProblems($name);
+            //Validate attribute and throw exception if needed
+            $check = $this->validateAttribute($attributeName);
             if (  $check != null )
                 throw new Exception($check);
                 
-                foreach($arr['values'] as $obj)
+                //Iterate all instances of this attribute
+                foreach($attribute['instances'] as $attributeInstance)
                 {
-                    if ($obj instanceOf SimpleAttributeType)
+                    switch (true)
                     {
-                        if ($name != $baseName)
-                            if ($this->isArray($name))
-                                $array[$baseName][$name][] = $obj->oPrint();
-                            else
-                                $array[$baseName][$name] = $obj->oPrint();
-                        else
-                            if ($this->isArray($name))
-                                $array[$name][] = $obj->oPrint();
-                            else
-                                $array[$name] = $obj->oPrint();
-                    }
-                    else
-                    {
-                        if ( $this->isArray($name) )
-                            $array[$baseName][$name][] = $obj->arrayPrint();
-                        else
-                            $array[$baseName][$name] = $obj->arrayPrint();
+                        //Attribute is a FeatureType
+                        case (true):
+                            {
+                                
+                                $outputArray[]['S127:'.$thisName] = $attributeInstance->arrayPrint();
+                                break;
+                            }
+                   /*         
+                        //Attribute is a SimpleType
+                        case ($attributeInstance instanceOf SimpleAttributeType):
+                        {
+
+                            $outputArray[][$thisName] = $attributeInstance->oPrint();
+                            break;
+                        }
+                        
+                        //Attribute is a NOT a SimpleType
+                        default:
+                        {
+                            $outputArray[][$thisName] = $attributeInstance->arrayPrint($attributeName);
+                            break;
+                        }
+                        
                     }
                 }
+                
         }
  
-        return $array;
+        return $outputArray;
     }
     
     public function printSchema()
     {
         $schema = array();
-        foreach($this->values as $k=>$v)
+        foreach($this->attributes as $k=>$v)
         {
             $schema[] = $v['type']."::".$k."[".$v['minOccur']."..".$v['maxOccur']."]";
         }
         
         return $schema;
     }
+    */
 }
 	
 ?>

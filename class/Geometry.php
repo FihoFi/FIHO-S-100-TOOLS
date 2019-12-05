@@ -1,5 +1,45 @@
 <?php
 
+/*
+	*point
+	pointSet
+	curve
+	*surface
+	coverage
+	arcByCenterPoint
+	circleByCenterPoint
+	noGeometry
+	
+	<geometry>
+		<S100:pointProperty>
+			<S100:Point gml:id="CB.PILBOP.P.US5VA15M.US001873947800050.BOYLAT" srsDimension="2" srsName="urn:ogc:def:crs:EPSG::4326">
+				<gml:pos>
+					38.351 -76.361
+				</gml:pos>
+			</S100:Point>
+		</S100:pointProperty>
+	</geometry>
+		
+	 <geometry>                
+		<S100:surfaceProperty>
+			<S100:Polygon gml:id="CB.PILBOP.P.ReedyPtAnchorageArea" srsDimension="2" srsName="urn:ogc:def:crs:EPSG::4326">
+				<gml:exterior>
+					<gml:LinearRing>
+						<gml:posList>
+							39.571 -75.572
+							39.574 -75.569
+							39.566 -75.557
+							39.564 -75.559
+							39.571 -75.572
+						</gml:posList>
+					</gml:LinearRing>
+				</gml:exterior>
+			</S100:Polygon>
+			</S100:surfaceProperty>
+	</geometry>
+
+*/
+
 class Geometry extends CommonS100Type
 {
     private $positions = array();
@@ -32,7 +72,13 @@ class Geometry extends CommonS100Type
         $this->positions['wkt'] = $this->wkt; //add wkt to array
         return $this->positions;
     }
+    
+    public function oPrint()
+    {
+        return "TBD";
+    }
 }
+    
 
 class surface extends geometry{}
 class point extends geometry{}

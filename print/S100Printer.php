@@ -1,5 +1,9 @@
 <?php
 
+function cPrint($data) {
+    file_put_contents('console.log', $data."\r\n", FILE_APPEND);
+}
+
 function getS100class($class)
 {
     return $class->oPrint();
@@ -8,10 +12,14 @@ function getS100class($class)
 
 // function definition to convert array to xml
 function array_to_xml( $data, &$xml_data ) {
+    
     foreach( $data as $key => $value ) {
-        if( is_numeric($key) ){
-            $key = 'item'; //.($key+1); //dealing with <0/>..<n/> issues
+        
+        //the actual value
+        if( is_numeric($key)){
+           $key = '_'.$key; //.($key+1); //dealing with <0/>..<n/> issues
         }
+        
         if( is_array($value) ) {
             $subnode = $xml_data->addChild($key);
             array_to_xml($value, $subnode);

@@ -13,7 +13,8 @@ include 'ApplicationSchemaS127.php';
 
 //add printer
 define ( 'PRINT_PATH', '../../print/');
-include (PRINT_PATH.'S100Printer.php');
+include (PRINT_PATH.'S100GmlPrinter.php');
+
 
 //Create the dataset
 $s127 = new S127TrafficService();
@@ -95,11 +96,10 @@ $traficom = createAuthority(
 $ukcManagementArea->SrvControl_controlAuthority = $traficom;
 $s127->services = $ukcManagementArea;
 
-//print the dataset using the XML-printer function
-$xml = getS100xml($s127);
+$printer = new S100GmlPrinter($s127);
 
-//If you wanted, you could also print any single object for testing. for example the Authority
-//$xml = getS100xml($traficom);
+//header('Content-Type: application/json; charset=utf-8');
+$xml = $printer->printStructure();
 
 //output to screen
 header('Content-Type: application/xml; charset=utf-8');

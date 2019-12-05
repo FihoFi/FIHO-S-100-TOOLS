@@ -8,7 +8,7 @@ include 'ApplicationSchemaS122.php';
 
 //add printer
 define ( 'PRINT_PATH', '../../print/');
-include (PRINT_PATH.'S100Printer.php');
+include (PRINT_PATH.'S100GmlPrinter.php');
 
 //Create the dataset
 $s122 = new S122MarineProtectedAreas();
@@ -17,8 +17,9 @@ $s122->services = $mpa;
 $mpa->categoryOfMarineProtectedArea = new categoryOfMarineProtectedArea(4);
 $mpa->jurisdiction = new jurisdiction(2);
 
-//print the dataset using the XML-printer function
-$xml = getS100xml($s122);
+//print GML
+$printer = new S100GmlPrinter($s122);
+$xml = $printer->printStructure();
 
 //output to screen
 header('Content-Type: application/xml; charset=utf-8');

@@ -66,11 +66,10 @@ function createAuthority($category, $name, $description, $phone, $url, $address,
     
     $nonSta = new NonStandardWorkingDay();
     
-    /*
-    $varD = new VariableDate();
+    
+    $varD = new dateVariable();
     $varD = "No service during public national holidays.";
-    $nonSta->variableDate = $varD;
-    */
+    $nonSta->dateVariable = $varD;
     $srvh->ExceptionalWorkday_partialWorkingDay = $nonSta;
     $srvh->scheduleByDayOfWeek = $sched;
     $auth->AuthorityHours_theServiceHours = $srvh;
