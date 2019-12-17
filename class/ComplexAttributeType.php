@@ -1,4 +1,29 @@
-<?php
+<?php 
+/******************************************************************************
+*
+* Project:  FIHO-S-100-TOOLS
+* Purpose:  Generate S-100 based GML- products
+* Author:   Stefan Engström / traficom.fi
+*
+***************************************************************************
+*   Copyright (C) 2019 by Stefan Engström / traficom.fi                                 *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************
+*/
 
 /*
  * The complex attribute is a container of other Simple or Complex attributes.
@@ -121,6 +146,7 @@ abstract class ComplexAttributeType extends CommonS100Type
    
     public function getAllAttributes()
     {
+       
         //Iterate all attributes in current instance
         foreach($this->attributes as $attribute)
         {
@@ -141,110 +167,6 @@ abstract class ComplexAttributeType extends CommonS100Type
         
         return null;
     }
-    
-   /* 
-    private function isArrayAttribute($attributeName)
-    {
-        return $this->attributes[$attributeName]['maxOccur'] > 1;
-    }
-    
-    public function oPrint()
-    {
-       //print name of class
-        echo "<ul><li>".get_class($this);
-        
-        
-        foreach($this->attributes as $name=>$arr)
-        {
-            //validate 
-            $check = $this->hasProblems($name);
-            if (  $check != null )
-                throw new Exception($check);
-                
-           echo $this->isArray($name) ? "<ul><li>".$name : '';
-           foreach($arr['instances'] as $obj)
-               {
-                   if ($obj instanceOf SimpleAttributeType)
-                       echo "<ul><li>".$name . " = " . $obj->oPrint()."</ul>";
-                   else
-                   {    
-                       echo $obj->oPrint();
-                   }
-               }
-           echo $this->isArray($name) ? "</ul>" : '';
-               
-        }
-        echo "</ul>";
-    }
-    */
-                   
-    /*
-     * Recursive print of objects, atributes and values.
-     *
-     */
-                   
-                   /*
-    public function arrayPrint($parentAttributeName = null)
-    {
-       $outputArray = array();
-       $thisName = get_class($this);
-      
-       
-       //Iterate all attributes in current instance
-        foreach($this->attributes as $attributeName=>$attribute)
-        {
-            //Validate attribute and throw exception if needed
-            $check = $this->validateAttribute($attributeName);
-            if (  $check != null )
-                throw new Exception($check);
-                
-                //Iterate all instances of this attribute
-                foreach($attribute['instances'] as $attributeInstance)
-                {
-                    switch (true)
-                    {
-                        //Attribute is a FeatureType
-                        case (true):
-                            {
-                                
-                                $outputArray[]['S127:'.$thisName] = $attributeInstance->arrayPrint();
-                                break;
-                            }
-                   /*         
-                        //Attribute is a SimpleType
-                        case ($attributeInstance instanceOf SimpleAttributeType):
-                        {
-
-                            $outputArray[][$thisName] = $attributeInstance->oPrint();
-                            break;
-                        }
-                        
-                        //Attribute is a NOT a SimpleType
-                        default:
-                        {
-                            $outputArray[][$thisName] = $attributeInstance->arrayPrint($attributeName);
-                            break;
-                        }
-                        
-                    }
-                }
-                
-        }
- 
-        return $outputArray;
-    }
-    
-    public function printSchema()
-    {
-        $schema = array();
-        foreach($this->attributes as $k=>$v)
-        {
-            $schema[] = $v['type']."::".$k."[".$v['minOccur']."..".$v['maxOccur']."]";
-        }
-        
-        return $schema;
-    }
-    */
 }
 	
 ?>

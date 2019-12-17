@@ -8,14 +8,14 @@ Tools related to S-100 data model testing and product development. The aim of th
 Currently documentation is sparse. The best way forward is to first read this README, and then check out the directory 'example'.
 
 ## Install?
-The project should be straightforward to set up on any PHP- enabled webeserver. It has been developed on Apache with PHP 5.3. Simply copy all the directories to a folder under your webroot, and point your browser to a subfolder within the 'example'- directory. 
+The project should be straightforward to set up on any PHP- enabled webeserver. It has been developed on Apache with PHP 7. Simply copy all the directories to a folder under your webroot, and point your browser to a subfolder within the 'example'- directory. 
 
 ## Setup of the project
 
 1. PHP- classes reflecting basic S-100 structure (FeatureType, ComplexAttributeType etc)
 2. XSL- translation of the S-100 Feature catalog generates the datamodel as PHP- classes
 3. Additional data-validation and product creation using the framework and classes as regular PHP.
-4. A printer- function is used to print out the datamodel for verification.
+4. A GML- printer class is used to print out the data for verification.
 
 ## Structure of the classes in directory 'class'
 
@@ -38,13 +38,17 @@ The resource directory holds the XSLT- translation script that is used to tarnsl
 
 ## Structure of the classes in directory 'print'
 
-Currently this directory holds a single PHP-file S100Printer.php with public functions for data output.
-_It is intended that these functions are encapsulated into a class later._
-The functions will accept a $class - parameter, which should refer to a CommonS100ype- based class.
-The oPrint() function of the referred class is used to retreive the data as an array.
+Currently this directory holds a single class: S100GMLPrinter. The class accepts a $rootClass - parameter, which should refer to a CommonS100Type- class. The output is a GML- document. 
 
 ## Structure of the classes in directory 'example'
 This directory holds a working sample, using the S-127 Feature catalogue. 
+
+## Notes on the current version
+* Geometry supports input of WKT: LINESTRING (Line), POLYGON (Surface) and POINT (Point)
+* There is NO validation of Geometries in FeatuerTypes (TODO: Add validation)
+
+## Author
+Stefan Engström /stefan.engstrom@traficom.fi
 
 ## Version 0.0.1
 TBD

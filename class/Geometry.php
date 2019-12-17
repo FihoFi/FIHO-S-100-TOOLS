@@ -1,62 +1,41 @@
-<?php
-
-/*
-	*point
-	pointSet
-	curve
-	*surface
-	coverage
-	arcByCenterPoint
-	circleByCenterPoint
-	noGeometry
-	
-	<geometry>
-		<S100:pointProperty>
-			<S100:Point gml:id="CB.PILBOP.P.US5VA15M.US001873947800050.BOYLAT" srsDimension="2" srsName="urn:ogc:def:crs:EPSG::4326">
-				<gml:pos>
-					38.351 -76.361
-				</gml:pos>
-			</S100:Point>
-		</S100:pointProperty>
-	</geometry>
-		
-	 <geometry>                
-		<S100:surfaceProperty>
-			<S100:Polygon gml:id="CB.PILBOP.P.ReedyPtAnchorageArea" srsDimension="2" srsName="urn:ogc:def:crs:EPSG::4326">
-				<gml:exterior>
-					<gml:LinearRing>
-						<gml:posList>
-							39.571 -75.572
-							39.574 -75.569
-							39.566 -75.557
-							39.564 -75.559
-							39.571 -75.572
-						</gml:posList>
-					</gml:LinearRing>
-				</gml:exterior>
-			</S100:Polygon>
-			</S100:surfaceProperty>
-	</geometry>
-
+<?php 
+/******************************************************************************
+*
+* Project:  FIHO-S-100-TOOLS
+* Purpose:  Generate S-100 based GML- products
+* Author:   Stefan Engström / traficom.fi
+*
+***************************************************************************
+*   Copyright (C) 2019 by Stefan Engström / traficom.fi                                 *
+*                                                                         *
+*   This program is free software; you can redistribute it and/or modify  *
+*   it under the terms of the GNU General Public License as published by  *
+*   the Free Software Foundation; either version 2 of the License, or     *
+*   (at your option) any later version.                                   *
+*                                                                         *
+*   This program is distributed in the hope that it will be useful,       *
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+*   GNU General Public License for more details.                          *
+*                                                                         *
+*   You should have received a copy of the GNU General Public License     *
+*   along with this program; if not, write to the                         *
+*   Free Software Foundation, Inc.,                                       *
+*   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
+***************************************************************************
 */
 
 class Geometry extends CommonS100Type
 {
-    private $positions = array();
     private $wkt = null;
-    private $posCount = 0;
     
-    /**
-     * Add WGS-84 position
-     */
-    public function addPosition($lat, $lon)
+    //GML ID
+    public $gmlId = null;
+    
+    public function __construct()
     {
-         if (!is_numeric($lat) || !is_numeric($lon))
-             throw new Exception("Position is non-numeric");
-         
-         $this->positions[$this->posCount]['lat'] = $lat;
-         $this->positions[$this->posCount]['lon'] = $lon;
-         $this->posCount++;
+        //GENERATE ID
+        $this->gmlId = uniqid();
     }
     
     public function addWKT($wkt)
@@ -67,20 +46,52 @@ class Geometry extends CommonS100Type
         $this->wkt = $wkt;
     }
     
-    public function arrayPrint()
+    //Return WKT as Poslist
+    private function getPosList($invert)
     {
-        $this->positions['wkt'] = $this->wkt; //add wkt to array
-        return $this->positions;
+        $posList = array();
+        //MATCH POSITIONS;
+        preg_match_all('/[0-9\.]+/', $this->wkt, $matches);
+        
+        //no inversion
+        if (!$invert)
+            return implode(" ", $matches[0]);
+        
+        //reorder lon/lat into lat/lon
+        for($i=0; $i < count($matches[0]) ; $i+=2)
+        {
+            $posList[] = $matches[0][$i+1];
+            $posList[] = $matches[0][$i];
+        }
+        
+        return implode(" ", $posList);
+    }
+    public function getType()
+    {
+        switch (substr($this->wkt, 0, 5))
+        {
+            case 'POINT':
+                return 'POINT'; 
+                break;
+            
+            case 'POLYG':
+                return 'SURFACE';
+                break;
+                
+            case 'LINES':
+                return 'LINE';
+                break;
+            
+            default:
+                throw new Exception('Geometry: '. $this->wkt.' is not supported by class Geometry');
+        }
+        
     }
     
-    public function oPrint()
+    public function oPrint($invert=false)
     {
-        return "TBD";
+        return $this->getPosList($invert);
     }
 }
-    
-
-class surface extends geometry{}
-class point extends geometry{}
 
 ?>

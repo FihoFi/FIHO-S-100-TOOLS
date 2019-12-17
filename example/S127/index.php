@@ -67,7 +67,7 @@ $ukcAllowanceArea->underkeelAllowance = $ukc;
 
 //Geometry
 $area = new Geometry();
-$area->addWkt('POLYGON ((27.7020433774647 60.4487770871112, 27.7055084002909 60.4472713380439, 27.7146005866902 60.4511561456963, 27.7189352578333 60.456562736, 27.7236744815567 60.456812612382, 27.7236690554147 60.4572613304076, 27.7180467783976 60.4574739982463, 27.7136723958333 60.4527407243333, 27.7020433774647 60.4487770871112))');
+$area->addWkt('POLYGON ((25.7020433774647 60.4487770871112, 25.7055084002909 60.4472713380439, 25.7146005866902 60.4511561456963, 25.7189352578333 60.456562736, 25.7236744815567 60.456812612382, 25.7236690554147 60.4572613304076, 25.7180467783976 60.4574739982463, 25.7136723958333 60.4527407243333, 25.7020433774647 60.4487770871112))');
 
 $ukcAllowanceArea->Geometry = $area;
     
@@ -96,7 +96,27 @@ $traficom = createAuthority(
 $ukcManagementArea->SrvControl_controlAuthority = $traficom;
 $s127->services = $ukcManagementArea;
 
-$printer = new S100GmlPrinter($s127);
+$pilbop = new PilotBoardingPlace();
+$point = new Geometry();
+$point->addWkt('POINT (24.945831 60.192059)');
+$pilbop->Geometry = $point;
+$s127->services = $pilbop;
+
+$pilbop2 = new PilotBoardingPlace();
+$point2 = new Geometry();
+$point2->addWkt('LINESTRING (24.945831 60.192059, 24.945831 59.192059 )');
+$pilbop2->Geometry = $point2;
+$s127->services = $pilbop2;
+
+//Specicif namespace-data for GML- printer
+$productName = "S127";
+$productNs = "http://www.iho.int/S127/gml/cs0/1.0";
+$rolesNs = 'http://www.iho.int/S127/gml/1.0/roles/';
+//Specific metadata for printer
+$title = "S127 test product by traficom.fi (S.Engstrom)";
+$abstract = "This product is created as a test of the FIHO S100 tools";
+
+$printer = new S100GmlPrinter($s127, $productName, $productNs, $rolesNs, $title, $abstract);
 
 //header('Content-Type: application/json; charset=utf-8');
 $xml = $printer->printStructure();
