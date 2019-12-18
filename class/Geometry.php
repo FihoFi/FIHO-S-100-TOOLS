@@ -35,7 +35,7 @@ class Geometry extends CommonS100Type
     public function __construct()
     {
         //GENERATE ID
-        $this->gmlId = uniqid();
+        $this->gmlId = 'FIHO.GEOMETRY.'.uniqid();
     }
     
     public function addWKT($wkt)

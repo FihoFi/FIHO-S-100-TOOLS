@@ -6,7 +6,7 @@
 * Author:   Stefan Engström / traficom.fi
 *
 ***************************************************************************
-*   Copyright (C) 2019 by Stefan Engström / traficom.fi                                 *
+*   Copyright (C) 2019 by Stefan Engström / traficom.fi                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -25,17 +25,24 @@
 ***************************************************************************
 */
 
+/**
+ * @property Geometry[0..*] Geometry | The Geometry
+ */
 abstract class AbstractFeatureType extends ComplexAttributeType
 {
     //GML ID
     public $gmlId = null;
 
+    /**
+     * @property Geometry[0..*] Geometry | The Geometry
+     */
     public function __construct()
     {
+        //Geometry must be added last
         $this->addAttribute('Geometry', 'Geometry', 0, MAX_OCCUR);
         
         //GENERATE ID
-        $this->gmlId = uniqid();
+        $this->gmlId = 'FIHO.FEATURE.'.uniqid();
     }
 }
 

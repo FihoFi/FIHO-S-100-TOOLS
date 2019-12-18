@@ -64,7 +64,7 @@ abstract class EnumerationType extends SimpleAttributeType
 	 */
 	public function oPrint()
 	{
-	    return $this->value .'-'. $this->description;
+	    return $this->description;
 	}
 }
 

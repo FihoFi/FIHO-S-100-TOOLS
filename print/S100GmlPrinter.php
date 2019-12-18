@@ -37,6 +37,7 @@ class S100GmlPrinter
     private $defaultNs = "http://www.traficom.fi";
    
     //set specific to PS
+    private $schemaLocation = 'xsi:schemaLocation="http://www.iho.int/S127/gml/cs0/0.1 ../../../schemas/S127/0.2/20180824/S127.xsd"';
     private $productName = "S12X";
     private $productNs = "http://www.iho.int/S12X/gml/cs0/1.0";
     private $rolesNs = 'http://www.iho.int/s12X/gml/1.0/roles/';
@@ -45,7 +46,7 @@ class S100GmlPrinter
     
     private $epsg = 'urn:ogc:def:crs:EPSG:4326';
    
-    function __construct ($rootClass, $productName = null, $productNs = null, $rolesNs = null, $title = null, $abstract=null)
+    function __construct ($rootClass, $productName = null, $productNs = null, $rolesNs = null, $title = null, $abstract=null, $schemaLocation=null)
     {
         //Update PS- specific data if given
         $this->productName = ( $productName == null ) ? $this->productName : $productName;
@@ -53,20 +54,23 @@ class S100GmlPrinter
         $this->rolesNs = ( $rolesNs == null ) ? $this->rolesNs : $rolesNs;
         $this->title = ( $title == null ) ? $this->title : $title;
         $this->abstract = ( $abstract == null ) ? $this->abstract : $abstract;
+        $this->schemaLocation = ( $schemaLocation == null ) ? $this->schemaLocation : $schemaLocation;
         
         $this->rootClass = $rootClass;
         
         // creating object of SimpleXMLElement
         $doc = new SimpleXMLElement(
             '<?xml version="1.0"?>
-            <'.$this->productName.':Dataset 
+            <'.$this->productName.':Dataset '.
+            $this->schemaLocation.'
             xmlns="'.$this->defaultNs.'"
             xmlns:'.$this->productName.'="'.$this->productNs.'"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
             xmlns:gml="http://www.opengis.net/gml/3.2"
             xmlns:S100="'.$this->s100Ns .'"
             xmlns:s100_profile="http://www.iho.int/S-100/profile/s100_gmlProfile"
-            xmlns:xlink="http://www.w3.org/1999/xlink">'
+            xmlns:xlink="http://www.w3.org/1999/xlink" 
+            gml:id="ABD123">'
             .$this->printEnvelopeString()
             .$this->printMetaInformationString().
             '</'.$this->productName.':Dataset>');
@@ -79,7 +83,7 @@ class S100GmlPrinter
      * The root object to use is passed into the constructor.  
      * @return string The full GML- document as a string
      */
-    function printStructure()
+    function printGML()
     { 
         //reset objectlist
         $this->objectList = array();
@@ -101,7 +105,22 @@ class S100GmlPrinter
         $xmlDomDoc->formatOutput = true;
         $xmlDomDoc->loadXML($this->xml->saveXML());
         $result = $xmlDomDoc->saveXML();
-        return trim($result);
+        return $this->cleanupGML($result);
+    }
+    
+    /**
+     * Function cleans up the GML
+     * @param string $gmlString
+     */
+    private function cleanupGml($gmlString)
+    {
+        //remove default xmlns- declaration, needed for correct behaviour of SimpleXML
+        $gmlString = str_replace('xmlns="'.$this->defaultNs.'"', '', $gmlString);
+        
+        //XXX different definition in FC vs. GML
+        $gmlString = str_replace('Geometry', 'geometry', $gmlString);
+        
+        return trim($gmlString);
     }
     
     /**
@@ -133,6 +152,7 @@ class S100GmlPrinter
                     //If instance is a FeatureType or InformationType, it shall be included asa new <imember> with references;
                     if ($instance instanceOf FeatureType || $instance instanceOf InformationType)
                     {
+                        /*XXX Authority is left out 
                         //Check if this feature was referenced elsewhere, and already printed
                         if (isset($this->objectList[$parentGmlId]))
                         {
@@ -140,11 +160,14 @@ class S100GmlPrinter
                             $node = $this->objectList[$parentGmlId];
                            
                         }
-                        else
+                        else*/
                         {
+                            //features in member
+                            $memberType = $instance instanceOf FeatureType ? 'member' : 'imember';
+                            
                             //add current feature as a new iMember at root- level
-                            $newParentNode = $this->xml->addChild('imember', null, $this->defaultNs);
-                            $node = $newParentNode->addChild(get_class($instance), null, $this->gmlNs); // get the type of the object
+                            $newParentNode = $this->xml->addChild($memberType, null, $this->defaultNs);
+                            $node = $newParentNode->addChild(get_class($instance), null, $this->productNs); // get the type of the object
                             $node->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
                             
                             //add node to list
@@ -167,8 +190,8 @@ class S100GmlPrinter
                             
                             //ref
                             $ref = $parentNode->addChild($rolenames[1], null, $this->defaultNs);
-                            $ref->addAttribute('xlink:href', $xlink_href, 'xlink');
-                            $ref->addAttribute('xlink:arcrole', $xlink_role.$rolenames[0], 'xlink');
+                            $ref->addAttribute('xlink:href', $xlink_href, "http://www.w3.org/1999/xlink");
+                                $ref->addAttribute('xlink:arcrole', $xlink_role.$rolenames[0], "http://www.w3.org/1999/xlink");
                             
                             //XXX flag this objects gml:id to be the referenced in the referenced gml:id 
                         }
@@ -229,7 +252,7 @@ class S100GmlPrinter
            
             $geometry = $parentNode->addChild('Geometry', null, $this->defaultNs);
             $surface = $geometry->addChild('pointProperty',null, $this->s100Ns);
-            $point = $surface->addChild('Point',null, $this->gmlNs);
+            $point = $surface->addChild('Point',null, $this->s100Ns); //XXX correct NS?
             $point->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
             $point->addAttribute('srsDimension', '2');
             $point->addAttribute('srsName', $this->epsg);

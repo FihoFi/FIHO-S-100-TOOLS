@@ -6,7 +6,7 @@
 * Author:   Stefan Engström / traficom.fi
 *
 ***************************************************************************
-*   Copyright (C) 2019 by Stefan Engström / traficom.fi                                 *
+*   Copyright (C) 2019 by Stefan Engström / traficom.fi                  *
 *                                                                         *
 *   This program is free software; you can redistribute it and/or modify  *
 *   it under the terms of the GNU General Public License as published by  *
@@ -144,9 +144,21 @@ abstract class ComplexAttributeType extends CommonS100Type
         $this->attributes[$name]['instances'] = array();
     }
    
+    /**
+     * Return all attributes, and reorder such that GEOMETRY comes last
+     * @throws Exception
+     * @return array
+     */
     public function getAllAttributes()
     {
+       //Reorder such that Geometry goes last
+       if (isset($this->attributes['Geometry']))
+       {
+           $geometry = array_shift($this->attributes); // remove first item
+           $this->attributes['Geometry'] = $geometry; // add as last item
+       }
        
+        
         //Iterate all attributes in current instance
         foreach($this->attributes as $attribute)
         {

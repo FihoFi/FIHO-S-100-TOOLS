@@ -34,7 +34,7 @@ abstract class AbstractInformationType extends ComplexAttributeType
     {
         
         //GENERATE ID
-        $this->gmlId = uniqid();
+        $this->gmlId = 'FIHO.INFORMATION.'.uniqid();
     }
 }
 
