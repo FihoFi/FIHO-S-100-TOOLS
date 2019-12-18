@@ -19,7 +19,7 @@ $mpa->jurisdiction = new jurisdiction(2);
 
 //print GML
 $printer = new S100GmlPrinter($s122);
-$xml = $printer->printStructure();
+$xml = $printer->printGml();
 
 //output to screen
 header('Content-Type: application/xml; charset=utf-8');

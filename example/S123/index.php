@@ -18,7 +18,7 @@ $ccs->isMRCC = new isMRCC(true);
 
 //print GML
 $printer = new S100GmlPrinter($s123);
-$xml = $printer->printStructure();
+$xml = $printer->printGml();
 
 //output to screen
 header('Content-Type: application/xml; charset=utf-8');
