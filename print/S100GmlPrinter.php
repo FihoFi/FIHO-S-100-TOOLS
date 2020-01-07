@@ -25,10 +25,16 @@
 ***************************************************************************
 */
 
+/**
+ * Class prints the object as GML
+ * @author Stefan Engström
+ *
+ */
 class S100GmlPrinter
 {
     private $rootClass; //shall be a subclass of ComplexAttribute
-    private $xml;
+    private $gmlId;
+    private $xml; //holds the SimpleXML
     private $objectList = array(); //a list of references to the objects printed as $objectList[$gmlId] = SimpleXMLNode
     
     //NAMESPACE
@@ -48,6 +54,9 @@ class S100GmlPrinter
    
     function __construct ($rootClass, $productName = null, $productNs = null, $rolesNs = null, $title = null, $abstract=null, $schemaLocation=null)
     {
+        $this->rootClass = $rootClass;
+        $this->gmlId = 'FIHO.GML.'.uniqid();
+       
         //Update PS- specific data if given
         $this->productName = ( $productName == null ) ? $this->productName : $productName;
         $this->productNs = ( $productNs == null ) ? $this->productNs : $productNs;
@@ -55,25 +64,34 @@ class S100GmlPrinter
         $this->title = ( $title == null ) ? $this->title : $title;
         $this->abstract = ( $abstract == null ) ? $this->abstract : $abstract;
         $this->schemaLocation = ( $schemaLocation == null ) ? $this->schemaLocation : $schemaLocation;
-        
-        $this->rootClass = $rootClass;
-        
-        // creating object of SimpleXMLElement
-        $doc = new SimpleXMLElement(
-            '<?xml version="1.0"?>
-            <'.$this->productName.':Dataset '.
-            $this->schemaLocation.'
-            xmlns="'.$this->defaultNs.'"
-            xmlns:'.$this->productName.'="'.$this->productNs.'"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    
+        $this->initializeXML();
+
+    }
+     
+        function initializeXML()
+        {
+            $stub = '<?xml version="1.0"?>
+            <{$this->productName}:Dataset {$this->schemaLocation}
+            xmlns="{$this->defaultNs}"
+            xmlns:{$this->productName}="{$this->productNs}"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:gml="http://www.opengis.net/gml/3.2"
-            xmlns:S100="'.$this->s100Ns .'"
+            xmlns:S100="{$this->s100Ns}"
             xmlns:s100_profile="http://www.iho.int/S-100/profile/s100_gmlProfile"
-            xmlns:xlink="http://www.w3.org/1999/xlink" 
-            gml:id="ABD123">'
-            .$this->printEnvelopeString()
-            .$this->printMetaInformationString().
-            '</'.$this->productName.':Dataset>');
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            gml:id="{$this->gmlId}">
+            </{$this->productName}:Dataset>';
+                
+            $stub = str_replace('{$this->productName}', $this->productName, $stub);
+            $stub = str_replace('{$this->schemaLocation}', $this->schemaLocation, $stub);
+            $stub = str_replace('{$this->defaultNs}', $this->defaultNs, $stub);
+            $stub = str_replace('{$this->productNs}', $this->productNs, $stub);
+            $stub = str_replace('{$this->s100Ns}', $this->s100Ns, $stub);
+            $stub = str_replace('{$this->gmlId}', $this->gmlId, $stub);
+            
+            // creating object of SimpleXMLElement
+            $doc = new SimpleXMLElement($stub);
         
         $this->xml = $doc;
     }
@@ -116,15 +134,16 @@ class S100GmlPrinter
     {
         //remove default xmlns- declaration, needed for correct behaviour of SimpleXML
         $gmlString = str_replace('xmlns="'.$this->defaultNs.'"', '', $gmlString);
-        
-        //XXX different definition in FC vs. GML
-        $gmlString = str_replace('Geometry', 'geometry', $gmlString);
+                
+        //XXX different in S128 0.7.5
+        if ($this->productName == "S128")
+            $gmlString = str_replace('Dataset', 'DataSet', $gmlString);
         
         return trim($gmlString);
     }
     
     /**
-     * This is an recursive function, cereating the GML- structure as a SimpleXML- document
+     * This is an recursive function, creating the GML- structure as a SimpleXML- document
      * @param ArrayObject $attributes array of the calling "parent"
      * @param SimpleXMLElement $parentNode the XML- node of the calling "parent"
      * @param string $gmlId GML ID of the parent node for easy access. NULL if parent is a Complex Attribute
@@ -145,92 +164,139 @@ class S100GmlPrinter
             //iterate alla instances (as populated in this product)
             foreach($attribute['instances'] as $instance)
             {
-               
-               //if the instance is a Complex attribute, it has no final values
-               if ($instance instanceOf ComplexAttributeType)
-               {
-                    //If instance is a FeatureType or InformationType, it shall be included asa new <imember> with references;
-                    if ($instance instanceOf FeatureType || $instance instanceOf InformationType)
-                    {
-                        /*XXX Authority is left out 
-                        //Check if this feature was referenced elsewhere, and already printed
-                        if (isset($this->objectList[$parentGmlId]))
-                        {
-                            //use existing node if already printed to XML
-                            $node = $this->objectList[$parentGmlId];
-                           
-                        }
-                        else*/
-                        {
-                            //features in member
-                            $memberType = $instance instanceOf FeatureType ? 'member' : 'imember';
-                            
-                            //add current feature as a new iMember at root- level
-                            $newParentNode = $this->xml->addChild($memberType, null, $this->defaultNs);
-                            $node = $newParentNode->addChild(get_class($instance), null, $this->productNs); // get the type of the object
-                            $node->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
-                            
-                            //add node to list
-                            $this->objectList[$instance->gmlId] = $node;
-                        }
-                      
-                        
-                        //do not add reference for top-level objects
-                        if ($parentNode != $this->xml)
-                        {
-                            //The current $attribute holds the reference
-                            //The current $attribute['name'] holds the rolenames of the association
-                            //<theContactDetails xlink:href="#CP.CONDET.PILOT.AMP" xlink:arcrole="http://www.iho.int/s127/gml/1.0/roles/authorityContact"/>
-                            
-                            //the attribute name holds the rolenames separated by  underscore
-                            $rolenames = explode('_', $attribute['name']);
-                            
-                            $xlink_href = "#".$instance->gmlId;
-                            $xlink_role = $this->rolesNs;
-                            
-                            //ref
-                            $ref = $parentNode->addChild($rolenames[1], null, $this->defaultNs);
-                            $ref->addAttribute('xlink:href', $xlink_href, "http://www.w3.org/1999/xlink");
-                                $ref->addAttribute('xlink:arcrole', $xlink_role.$rolenames[0], "http://www.w3.org/1999/xlink");
-                            
-                            //XXX flag this objects gml:id to be the referenced in the referenced gml:id 
-                        }
-                        
-                        //ADD COMPLEX ATTRIBUTES and pass GML-ID of parent
-                        $this->printObject($instance->getAllAttributes(), $node, $instance->gmlId); //pass node as parent to children
-                    }
-                    
-                    else
-                    {
-                        //add the content of a ComplexAttribute instead of a reference
-                        $node = $parentNode->addChild(get_class($instance), null, $this->defaultNs); // get the type of the object
-                        
-                        //ADD COMPLEX ATTRIBUTES with GML-ID set to null
-                        $this->printObject($instance->getAllAttributes(), $node, null); //pass node as parent to children
-                    }
-                    
-                    
+
+                //Print feature or information <member> or <imember>
+                if ($instance instanceOf AbstractFeatureType || $instance instanceOf AbstractInformationType)
+                {
+                    $this->printFeature($parentNode, $attribute, $instance);
                 }
                 
-                //SIMPLE
+                //Print Complex attribute, it has no final values
+                elseif ($instance instanceOf ComplexAttributeType)
+                {
+                    $this->printComplex($parentNode, $instance);
+                }
+                
+                //Print Simple attribute (The actual values)
                 else
                 {   
-                    //Add the value of a Geometry
-                    if (get_class($instance) == 'Geometry')
-                    {
-                        $node = $this->printGeometry($parentNode, $instance); //print value in node
-                        
-                    }
-                    else
-                    {
-                        //Add the value of a SimpleAttribute    
-                        $node = $parentNode->addChild(get_class($instance), $instance->oPrint(), $this->defaultNs); //print value in node
-                    }
+                   $this->printSimple($parentNode, $instance);
                 }
             }
         }
     }
     
+    /**
+     * Print a Feature or Information type
+     * @param SimpleXMLElement $parentNode
+     * @param array $attribute
+     * @param CommonS100Type $instance
+     */
+    private function printFeature($parentNode, $attribute, $instance)
+    {
+        $node = null;
+        
+        //Check if this feature was referenced elsewhere, and is already printed
+        $isDuplicate = isset($this->objectList[$instance->gmlId]);
+        
+        //use duplicate as node instead of printing new
+        if ($isDuplicate)
+        {
+            //use existing node if already printed to XML
+            $node = $this->objectList[$instance->gmlId];
+        }
+        else
+        {
+            //features in member
+            $memberType = $instance instanceOf AbstractFeatureType ? 'member' : 'imember';
+            
+            //add current feature as a new iMember at root- level
+            $newParentNode = $this->xml->addChild($memberType, null, $this->defaultNs);
+            $node = $newParentNode->addChild(get_class($instance), null, $this->productNs); // get the type of the object
+            $node->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
+            
+            //add node to list, and reference list to not print again
+            $this->objectList[$instance->gmlId] = $node;
+        }
+        
+        
+        //do not add reference for top-level objects
+        if ($parentNode != $this->xml)
+        {
+            //The current $attribute holds the reference
+            //The current $attribute['name'] holds the rolenames of the association
+            //<theContactDetails xlink:href="#CP.CONDET.PILOT.AMP" xlink:arcrole="http://www.iho.int/s127/gml/1.0/roles/authorityContact"/>
+            
+            //the attribute name holds the rolenames separated by  underscore
+            $rolenames = explode('_', $attribute['name']);
+            
+            $xlink_href = "#".$instance->gmlId;
+            $xlink_role = $this->rolesNs;
+            
+            //add ref to parent
+            $ref = $parentNode->addChild($rolenames[1], null, $this->defaultNs);
+            $ref->addAttribute('xlink:href', $xlink_href, "http://www.w3.org/1999/xlink");
+            $ref->addAttribute('xlink:arcrole', $xlink_role.$rolenames[1], "http://www.w3.org/1999/xlink");
+            
+            //$arc_xlink_href = "#".$parentGmlId;
+            //add arc-ref to node
+            //XXX ABILITY TO PRINT ARCREF, BUT INVALID BY XSD
+             //XXX in existing node insert is done at the end of file
+             /*
+             $ref = $node->addChild($rolenames[0], null, $this->defaultNs);
+             $ref->addAttribute('xlink:href', $arc_xlink_href, "http://www.w3.org/1999/xlink");
+             $ref->addAttribute('xlink:arcrole', $xlink_role.$rolenames[1], "http://www.w3.org/1999/xlink");
+             */
+            
+            //This works, but needs gml:id
+            //$ref = $node->addChild("invFeatureAssociation", null, $this->s100Ns);
+            
+        }
+        
+        //Print this object ONLY if it has not already been printed
+        if (!$isDuplicate)
+            $this->printObject($instance->getAllAttributes(), $node, $instance->gmlId); //pass node as parent to children
+    }
+    
+    /**
+     * Print a ComplexAttribute
+     * @param SimpleXMLElement $parentNode
+     * @param CommonS100Type $instance
+     */
+    private function printComplex($parentNode, $instance)
+    {
+        //If instance is further a FeatureType or InformationType, it shall be included asa new <imember> with references;
+        
+        //else
+        {
+            //add the content of a ComplexAttribute instead of a reference
+            $node = $parentNode->addChild(get_class($instance), null, $this->defaultNs); // get the type of the object
+            
+            //ADD COMPLEX ATTRIBUTES with GML-ID set to null
+            $this->printObject($instance->getAllAttributes(), $node, null); //pass node as parent to children
+        }
+        
+    }
+    
+    /**
+     * Print a SimpleAttribute
+     * @param SimpleXMLElement $parentNode
+     * @param CommonS100Type $instance
+     */
+    private function printSimple($parentNode, $instance)
+    {
+        //Add the value of a Geometry
+        if (get_class($instance) == 'Geometry')
+        {
+            $this->printGeometry($parentNode, $instance); //print value in node
+            
+        }
+        else
+        {
+            //Add the value of a SimpleAttribute
+            $parentNode->addChild(get_class($instance), $instance->oPrint(), $this->defaultNs); //print value in node
+        }
+    }
     /**
      * This is a helper- function to print the <Geometry/> into the parent SimpleXML-node
      * srsData is hardcoded into the function
@@ -239,7 +305,7 @@ class S100GmlPrinter
      */
     private function printGeometry($parentNode, $instance)
     {
-        //get positions and inert into lat/lon
+        //get positions and insert into lat/lon
         $positions = $instance->oPrint(true);
         
         //Read type from Geometry
@@ -250,7 +316,7 @@ class S100GmlPrinter
             
         case 'POINT':
            
-            $geometry = $parentNode->addChild('Geometry', null, $this->defaultNs);
+            $geometry = $parentNode->addChild('geometry', null, $this->defaultNs);
             $surface = $geometry->addChild('pointProperty',null, $this->s100Ns);
             $point = $surface->addChild('Point',null, $this->s100Ns); //XXX correct NS?
             $point->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
@@ -263,7 +329,7 @@ class S100GmlPrinter
         
         case 'LINE':
             
-            $geometry = $parentNode->addChild('Geometry', null, $this->defaultNs);
+            $geometry = $parentNode->addChild('geometry', null, $this->defaultNs);
             $line = $geometry->addChild('lineProperty',null,$this->s100Ns);
             $string = $line->addChild('LineString',null, $this->gmlNs);
             $string->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
@@ -276,7 +342,7 @@ class S100GmlPrinter
             
         case 'SURFACE':
             
-            $geometry = $parentNode->addChild('Geometry', null, $this->defaultNs);
+            $geometry = $parentNode->addChild('geometry', null, $this->defaultNs);
             $surface = $geometry->addChild('surfaceProperty',null, $this->s100Ns);
             $polygon = $surface->addChild('Polygon',null, $this->gmlNs);
             $polygon->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
@@ -294,105 +360,6 @@ class S100GmlPrinter
             
         }
          
-    }
-    
-    //TODO
-    function printSchemaString()
-    {
-        return '<?xml-model href="http://10.90.192.19/schema/S100/S127/0.2/20180824/S127.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>';
-    }
-    
-    function printEnvelopeString()
-    {
-        return 
-        '<gml:boundedBy><gml:Envelope srsName="'.$this->epsg.'" srsDimension="2">
-        <gml:lowerCorner>15 55</gml:lowerCorner>
-        <gml:upperCorner>30 65</gml:upperCorner>
-        </gml:Envelope></gml:boundedBy>';
-    }
-    
-    //TODO
-    function printMetaInformationString()
-    {
-        
-        return
-        '<DatasetIdentificationInformation>
-        <S100:encodingSpecification>S-100 Part 10b</S100:encodingSpecification>
-        <S100:encodingSpecificationEdition>1.0</S100:encodingSpecificationEdition>
-        <S100:productIdentifier>'.$this->productName.'</S100:productIdentifier>
-        <S100:productEdition>0.0.0 - TEST</S100:productEdition>
-        <S100:applicationProfile/>
-        <S100:datasetFileIdentifier>12X_ABCDE</S100:datasetFileIdentifier>
-        <S100:datasetTitle>'.$this->title.'</S100:datasetTitle>
-        <S100:datasetReferenceDate>'.date("Y-m-d").'</S100:datasetReferenceDate>
-        <S100:datasetLanguage>en</S100:datasetLanguage>
-        <S100:datasetAbstract>'.$this->abstract.'</S100:datasetAbstract>
-        <S100:datasetTopicCategory>transportation</S100:datasetTopicCategory>
-    </DatasetIdentificationInformation>
-    <DatasetStructureInformation>
-        <S100:datasetCoordOriginX>0.0</S100:datasetCoordOriginX>
-        <S100:datasetCoordOriginY>0.0</S100:datasetCoordOriginY>
-        <S100:datasetCoordOriginZ>0.0</S100:datasetCoordOriginZ>
-        <S100:coordMultFactorX>1</S100:coordMultFactorX>
-        <S100:coordMultFactorY>1</S100:coordMultFactorY>
-        <S100:coordMultFactorZ>1</S100:coordMultFactorZ>
-    </DatasetStructureInformation>';
-    }
-    
-    //TODO
-    function printQualityString()
-    {
-    	return '
-    		<member>
-		<S127:QualityOfNonBathymetricData gml:id="JS.1">
-			<S100:featureObjectIdentifier>
-				<S100:agency>JS</S100:agency>
-				<S100:featureIdentificationNumber>110056</S100:featureIdentificationNumber>
-				<S100:featureIdentificationSubdivision>1</S100:featureIdentificationSubdivision>
-			</S100:featureObjectIdentifier>
-			<categoryOfTemporalVariation>Unlikely to Change</categoryOfTemporalVariation>
-			<sourceIndication>
-				<categoryOfAuthority>maritime</categoryOfAuthority>
-				<countryName>Jussland</countryName>
-				<reportedDate><date>2018-01-01</date></reportedDate>
-				<source>Jussland Hydrographic Office</source>
-			</sourceIndication>
-			<geometry><S100:surfaceProperty><gml:Surface gml:id="SURFACE001" srsDimension="2" srsName="urn:ogc:def:crs:EPSG::4326" >
-				<gml:patches>
-					<gml:PolygonPatch>
-						<gml:exterior><gml:LinearRing><gml:posList>-29.0000000 58.0000000 -29.0000000 79.0000000 -41.0000000 79.0000000 -41.0000000 58.0000000 -29.0000000 58.0000000</gml:posList></gml:LinearRing></gml:exterior>
-					</gml:PolygonPatch>
-				</gml:patches>
-			</gml:Surface></S100:surfaceProperty>
-			</geometry>
-		</S127:QualityOfNonBathymetricData>
-	</member>';
-    }
-    
-    //TODO
-    function printDataCoverage()
-    {
-    	return
-    	'	<member>
-		<S127:DataCoverage gml:id="JS.0">
-			<S100:featureObjectIdentifier>
-				<S100:agency>JS</S100:agency>
-				<S100:featureIdentificationNumber>110037</S100:featureIdentificationNumber>
-				<S100:featureIdentificationSubdivision>1</S100:featureIdentificationSubdivision>
-			</S100:featureObjectIdentifier>
-			<maximumDisplayScale>999</maximumDisplayScale>
-			<minimumDisplayScale>14999999</minimumDisplayScale>
-			<geometry><S100:surfaceProperty><gml:Surface gml:id="SURFACE000" srsDimension="2" srsName="urn:ogc:def:crs:EPSG::4326" >
-				<gml:patches>
-					<gml:PolygonPatch>
-						<gml:exterior><gml:LinearRing><gml:posList>-29.0000000 58.0000000 -29.0000000 79.0000000 -41.0000000 79.0000000 -41.0000000 58.0000000 -29.0000000 58.0000000</gml:posList></gml:LinearRing></gml:exterior>
-				</gml:PolygonPatch>
-				</gml:patches>
-			</gml:Surface></S100:surfaceProperty>
-			</geometry>
-		</S127:DataCoverage>
-	</member>
-    	';
     }
 }
 ?>

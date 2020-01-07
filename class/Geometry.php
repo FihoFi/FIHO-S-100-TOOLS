@@ -51,6 +51,7 @@ class Geometry extends CommonS100Type
     {
         $posList = array();
         //MATCH POSITIONS;
+        $matches = array();
         preg_match_all('/[0-9\.]+/', $this->wkt, $matches);
         
         //no inversion
