@@ -7,7 +7,7 @@
   * Add (indirect) Applicability association to the area using a PermssionType AssociationClass
  * Add one UnderkeelClearanceManagementArea.(The Authority- object is created in a separate function in an referenced file.)
  * Add 2 PilotBoarding- places.
- * Data is printed to screen and to a file in RES- folder, using S100GMLPrinter.
+ * GML-data is printed to screen
 */
 
 //add the S100 Application-schema for S-127
