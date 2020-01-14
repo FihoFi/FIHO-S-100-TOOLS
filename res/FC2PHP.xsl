@@ -1,58 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0"
-xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.int/S100FC" xmlns:S100Base="http://www.iho.int/S100Base" xmlns:S100CI="http://www.iho.int/S100CI" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:S100FD="http://www.iho.int/S100FD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.iho.int/S100FC">
-<xsl:output method="text"/>
-
-<!-- Add javadoc for enumeration and codelist-->
-<xsl:template name="javadoc_enum">
-	<xsl:value-of select="S100FC:code"/>=<xsl:value-of select="S100FC:label"/> <!--/ <xsl:value-of select="S100FC:definition"/>-->
-</xsl:template>
-
-<!-- Add init- functions for enumeration and codelist-->
-<xsl:template name="init_enum">
-					$this->addValue(<xsl:value-of select="S100FC:code"/>, "<xsl:value-of select="S100FC:label"/><xsl:text>");</xsl:text>
-</xsl:template>
-
-<!-- Add definition of referenced attribute -->					
-<xsl:template name="ref_attribute_description">
-	<xsl:variable name="refCode" select="S100FC:attribute/@ref"></xsl:variable> 
-	<xsl:for-each select="//S100FC:code[text()=$refCode]">
-		<xsl:text> </xsl:text><xsl:value-of select="../S100FC:definition"/>
-	</xsl:for-each>
-</xsl:template>
-
-<!-- Add inherited attributes as @property to Feature and Information comments-->
-<xsl:template name="addParentDescription"> 
-
-	<xsl:variable name="currCode" select="S100FC:code"/>
-	
-	<xsl:for-each select="S100FC:attributeBinding">
-		* @property <xsl:value-of select="S100FC:attribute/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>] <xsl:value-of select="S100FC:attribute/@ref"/> |Defined in <xsl:value-of select="$currCode"/>
-	</xsl:for-each>
-
-	<xsl:for-each select="S100FC:featureBinding">
-		* @property <xsl:value-of select="S100FC:informationType/@ref"/><xsl:value-of select="S100FC:featureType/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>] <xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:featureType/@ref"/> |Defined in <xsl:value-of select="$currCode"/>
-	</xsl:for-each>
-
-	<xsl:for-each select="S100FC:informationBinding">
-		* @property <xsl:value-of select="S100FC:informationType/@ref"/><xsl:value-of select="S100FC:featureType/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>] <xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:informationType/@ref"/> |Defined in <xsl:value-of select="$currCode"/>
-	</xsl:for-each>
-	
-	<xsl:variable name="refCode" select="S100FC:superType"/>
-	<xsl:for-each select="//S100FC:S100_FC_FeatureType[S100FC:code/text()=$refCode]">
-		<xsl:call-template name="addParentDescription"/>
-	</xsl:for-each>
-
-	<xsl:for-each select="//S100FC:S100_FC_InformationType[S100FC:code/text()=$refCode]">
-		<xsl:call-template name="addParentDescription"/>
-	</xsl:for-each>
-
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.int/S100FC" xmlns:S100Base="http://www.iho.int/S100Base" xmlns:S100CI="http://www.iho.int/S100CI" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:S100FD="http://www.iho.int/S100FD" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.iho.int/S100FC">
+	<xsl:output method="text"/>
+	<!-- Add javadoc for enumeration and codelist-->
+	<xsl:template name="javadoc_enum">
+		<xsl:value-of select="S100FC:code"/>=<xsl:value-of select="S100FC:label"/>
+		<!--/ <xsl:value-of select="S100FC:definition"/>-->
 	</xsl:template>
-
-		
-<xsl:template match="/S100FC:S100_FC_FeatureCatalogue">
-
-	<xsl:text disable-output-escaping="yes">&lt;?php</xsl:text>
+	<!-- Add init- functions for enumeration and codelist-->
+	<xsl:template name="init_enum">
+					$this->addValue(<xsl:value-of select="S100FC:code"/>, "<xsl:value-of select="S100FC:label"/>
+		<xsl:text>");</xsl:text>
+	</xsl:template>
+	<!-- Add definition of referenced attribute -->
+	<xsl:template name="ref_attribute_description">
+		<xsl:variable name="refCode" select="S100FC:attribute/@ref"/>
+		<xsl:for-each select="//S100FC:code[text()=$refCode]">
+			<xsl:text> </xsl:text>
+			<xsl:value-of select="../S100FC:definition"/>
+		</xsl:for-each>
+	</xsl:template>
+	<!-- Add inherited attributes as @property to Feature and Information comments-->
+	<xsl:template name="addParentDescription">
+		<xsl:variable name="currCode" select="S100FC:code"/>
+		<xsl:for-each select="S100FC:attributeBinding">
+		* @property <xsl:value-of select="S100FC:attribute/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+			<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>] <xsl:value-of select="S100FC:attribute/@ref"/> |Defined in <xsl:value-of select="$currCode"/>
+		</xsl:for-each>
+		<xsl:for-each select="S100FC:featureBinding">
+		* @property <xsl:value-of select="S100FC:informationType/@ref"/>
+			<xsl:value-of select="S100FC:featureType/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+			<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>] <xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:featureType/@ref"/> |Defined in <xsl:value-of select="$currCode"/>
+		</xsl:for-each>
+		<xsl:for-each select="S100FC:informationBinding">
+		* @property <xsl:value-of select="S100FC:informationType/@ref"/>
+			<xsl:value-of select="S100FC:featureType/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+			<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>] <xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:informationType/@ref"/> |Defined in <xsl:value-of select="$currCode"/>
+		</xsl:for-each>
+		<xsl:variable name="refCode" select="S100FC:superType"/>
+		<xsl:for-each select="//S100FC:S100_FC_FeatureType[S100FC:code/text()=$refCode]">
+			<xsl:call-template name="addParentDescription"/>
+		</xsl:for-each>
+		<xsl:for-each select="//S100FC:S100_FC_InformationType[S100FC:code/text()=$refCode]">
+			<xsl:call-template name="addParentDescription"/>
+		</xsl:for-each>
+	</xsl:template>
+	<xsl:template match="/S100FC:S100_FC_FeatureCatalogue">
+		<xsl:text disable-output-escaping="yes">&lt;?php</xsl:text>
 	/**
 	* S100 PS Features as PHP, generated by FIHO-S100-TOOLS-FC2PHP
 	* <xsl:value-of select="S100FC:name"/>
@@ -60,8 +53,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 	
 	//********************************* SIMPLE ATTRIBUTES ***********************************************************
 	<xsl:for-each select="S100FC:S100_FC_SimpleAttributes/S100FC:S100_FC_SimpleAttribute">
-		<xsl:choose>
-		 <xsl:when test="S100FC:valueType = 'enumeration'">
+			<xsl:choose>
+				<xsl:when test="S100FC:valueType = 'enumeration'">
 			/**
 			* Enumeration <xsl:value-of select="S100FC:code"/>
 			*
@@ -76,7 +69,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 				* <xsl:value-of select="S100FC:definition"/>
 				* @param int value
 				* <xsl:for-each select="S100FC:listedValues/S100FC:listedValue">
-				* <xsl:call-template name="javadoc_enum"/></xsl:for-each>
+				* <xsl:call-template name="javadoc_enum"/>
+					</xsl:for-each>
 				*/
 				 public function __construct($value = null)
 				{
@@ -87,8 +81,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 				}
 			}
 	     </xsl:when>
-		 
-		 <xsl:when test="S100FC:valueType = 'S100_CodeList'">
+				<xsl:when test="S100FC:valueType = 'S100_CodeList'">
 			/**
 			* S100_CodeList <xsl:value-of select="S100FC:code"/>
 			*
@@ -103,7 +96,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 				* <xsl:value-of select="S100FC:definition"/>
 				* @param int value
 				* <xsl:for-each select="S100FC:listedValues/S100FC:listedValue">
-				* <xsl:call-template name="javadoc_enum"/></xsl:for-each>
+				* <xsl:call-template name="javadoc_enum"/>
+					</xsl:for-each>
 				*/
 				 public function __construct($value = null)
 				{
@@ -114,8 +108,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 				}
 			}
 	     </xsl:when>
-		 
-         <xsl:otherwise>
+				<xsl:otherwise>
 			/**
 			* SimpleAttribute <xsl:value-of select="S100FC:code"/>
 			*
@@ -130,8 +123,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 				}
 			}
          </xsl:otherwise>
-       </xsl:choose>
-	</xsl:for-each>
+			</xsl:choose>
+		</xsl:for-each>
 	
 	//********************************* COMPLEX ATTRIBUTES ***********************************************************
 	<xsl:for-each select="S100FC:S100_FC_ComplexAttributes/S100FC:S100_FC_ComplexAttribute">
@@ -140,8 +133,9 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 		*
 		* <xsl:value-of select="S100FC:definition"/>
 		* <xsl:for-each select="S100FC:subAttributeBinding">
-		* @property <xsl:value-of select="S100FC:attribute/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>]  <xsl:value-of select="S100FC:attribute/@ref"/>
-		</xsl:for-each>
+		* @property <xsl:value-of select="S100FC:attribute/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>]  <xsl:value-of select="S100FC:attribute/@ref"/>
+			</xsl:for-each>
 		*/
 		class <xsl:value-of select="S100FC:code"/> extends ComplexAttributeType
 		{
@@ -150,14 +144,17 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 			*
 			* <xsl:value-of select="S100FC:definition"/>
 			*<xsl:for-each select="S100FC:subAttributeBinding">
-			* @property <xsl:value-of select="S100FC:attribute/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>]  <xsl:value-of select="S100FC:attribute/@ref"/> <xsl:call-template name="ref_attribute_description"/> 
-				</xsl:for-each>
+			* @property <xsl:value-of select="S100FC:attribute/@ref"/>[<xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>..<xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">*</xsl:if>]  <xsl:value-of select="S100FC:attribute/@ref"/>
+				<xsl:call-template name="ref_attribute_description"/>
+			</xsl:for-each>
 			*/
 			public function __construct()
 			{
 				parent::__construct();
 				
-				<xsl:for-each select="S100FC:subAttributeBinding">$this->addAttribute('<xsl:value-of select="S100FC:attribute/@ref"/>', '<xsl:value-of select="S100FC:attribute/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
+				<xsl:for-each select="S100FC:subAttributeBinding">$this->addAttribute('<xsl:value-of select="S100FC:attribute/@ref"/>', '<xsl:value-of select="S100FC:attribute/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 			}
 		}
@@ -173,7 +170,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 		* 
 		* <xsl:call-template name="addParentDescription"/>
 		*/
-		<xsl:if test="@isAbstract='true'">abstract</xsl:if> class <xsl:value-of select="S100FC:code"/> extends <xsl:value-of select="S100FC:superType"/><xsl:if test="not(S100FC:superType)">AbstractFeatureType</xsl:if>
+		<xsl:if test="@isAbstract='true'">abstract</xsl:if> class <xsl:value-of select="S100FC:code"/> extends <xsl:value-of select="S100FC:superType"/>
+			<xsl:if test="not(S100FC:superType)">AbstractFeatureType</xsl:if>
 		{
 		
 			/**
@@ -188,13 +186,16 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 				parent::__construct();
 				
 				//AttributeBindings
-				<xsl:for-each select="S100FC:attributeBinding">$this->addAttribute('<xsl:value-of select="S100FC:attribute/@ref"/>', '<xsl:value-of select="S100FC:attribute/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
+				<xsl:for-each select="S100FC:attributeBinding">$this->addAttribute('<xsl:value-of select="S100FC:attribute/@ref"/>', '<xsl:value-of select="S100FC:attribute/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 				//FeatureBindings
-				<xsl:for-each select="S100FC:featureBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:featureType/@ref"/>', '<xsl:value-of select="S100FC:featureType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if> );
+				<xsl:for-each select="S100FC:featureBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:featureType/@ref"/>', '<xsl:value-of select="S100FC:featureType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if> );
 				</xsl:for-each>
 				//InformationBindings
-				<xsl:for-each select="S100FC:informationBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:informationType/@ref"/>', '<xsl:value-of select="S100FC:informationType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
+				<xsl:for-each select="S100FC:informationBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:informationType/@ref"/>', '<xsl:value-of select="S100FC:informationType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 			}
 		}
@@ -210,7 +211,8 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 		* 
 		* <xsl:call-template name="addParentDescription"/>
 		*/
-		<xsl:if test="@isAbstract='true'">abstract</xsl:if> class <xsl:value-of select="S100FC:code"/> extends <xsl:value-of select="S100FC:superType"/><xsl:if test="not(S100FC:superType)">AbstractInformationType</xsl:if>
+		<xsl:if test="@isAbstract='true'">abstract</xsl:if> class <xsl:value-of select="S100FC:code"/> extends <xsl:value-of select="S100FC:superType"/>
+			<xsl:if test="not(S100FC:superType)">AbstractInformationType</xsl:if>
 		{
 			
 			/**
@@ -225,13 +227,16 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 				parent::__construct();
 				
 				//AttributeBindings
-				<xsl:for-each select="S100FC:attributeBinding">$this->addAttribute('<xsl:value-of select="S100FC:attribute/@ref"/>', '<xsl:value-of select="S100FC:attribute/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
+				<xsl:for-each select="S100FC:attributeBinding">$this->addAttribute('<xsl:value-of select="S100FC:attribute/@ref"/>', '<xsl:value-of select="S100FC:attribute/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 				//FeatureBindings
-				<xsl:for-each select="S100FC:featureBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:featureType/@ref"/>', '<xsl:value-of select="S100FC:featureType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if> );
+				<xsl:for-each select="S100FC:featureBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:featureType/@ref"/>', '<xsl:value-of select="S100FC:featureType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if> );
 				</xsl:for-each>
 				//InformationBindings
-				<xsl:for-each select="S100FC:informationBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:informationType/@ref"/>', '<xsl:value-of select="S100FC:informationType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/><xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
+				<xsl:for-each select="S100FC:informationBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:informationType/@ref"/>', '<xsl:value-of select="S100FC:informationType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 			}
 		}
@@ -250,12 +255,34 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 	<xsl:for-each select="S100FC:S100_FC_FeatureAssociations/S100FC:S100_FC_FeatureAssociation">
 		/**
 		* FeatureAssociation
+		*
 		* <xsl:value-of select="S100FC:definition"/>
+		* 
+		* <xsl:call-template name="addParentDescription"/>
 		*/
 		class <xsl:value-of select="S100FC:code"/> extends AbstractFeatureAssociation
 		{
 			<xsl:for-each select="S100FC:role">
-			public $<xsl:value-of select="@ref"/> = null;</xsl:for-each>
+			public $<xsl:value-of select="@ref"/> = null;
+			</xsl:for-each>
+			
+			/**
+			* FeatureAssociationType <xsl:value-of select="S100FC:code"/>
+			*
+			* <xsl:value-of select="S100FC:definition"/>
+			* 
+			* <xsl:call-template name="addParentDescription"/>
+			*/
+			public function __construct()
+			{
+				parent::__construct();
+				
+				//AttributeBindings
+				<xsl:for-each select="S100FC:attributeBinding">$this->addAttribute('<xsl:value-of select="S100FC:attribute/@ref"/>', '<xsl:value-of select="S100FC:attribute/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
+				</xsl:for-each>
+			}
+			
 		}
 	</xsl:for-each>
 	
@@ -264,16 +291,35 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:S100FC="http://www.iho.in
 	<xsl:for-each select="S100FC:S100_FC_InformationAssociations/S100FC:S100_FC_InformationAssociation">
 		/**
 		* InformationAssociation
+		*
 		* <xsl:value-of select="S100FC:definition"/>
+		*
+		* <xsl:call-template name="addParentDescription"/>
 		*/
 		class <xsl:value-of select="S100FC:code"/> extends AbstractInformationAssociation
 		{
 			<xsl:for-each select="S100FC:role">
 			public $<xsl:value-of select="@ref"/> = null;
 			</xsl:for-each>
+			
+			/**
+			* InformationAssociationType <xsl:value-of select="S100FC:code"/>
+			*
+			* <xsl:value-of select="S100FC:definition"/>
+			* 
+			* <xsl:call-template name="addParentDescription"/>
+			*/
+			public function __construct()
+			{
+				parent::__construct();
+				
+				//AttributeBindings
+				<xsl:for-each select="S100FC:attributeBinding">$this->addAttribute('<xsl:value-of select="S100FC:attribute/@ref"/>', '<xsl:value-of select="S100FC:attribute/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
+				</xsl:for-each>
+			}
 		}
 	</xsl:for-each>
-	<xsl:text disable-output-escaping="yes">?&gt;</xsl:text>
+		<xsl:text disable-output-escaping="yes">?&gt;</xsl:text>
 	</xsl:template>
 </xsl:stylesheet>
-

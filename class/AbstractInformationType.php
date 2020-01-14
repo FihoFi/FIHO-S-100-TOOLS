@@ -25,7 +25,7 @@
 ***************************************************************************
 */
 
-abstract class AbstractInformationType extends ComplexAttributeType
+abstract class AbstractInformationType extends AbstractType
 {
     //GML ID
     public $gmlId = null;
@@ -33,9 +33,14 @@ abstract class AbstractInformationType extends ComplexAttributeType
     public function __construct()
     {
         
+        parent::__construct();
+        
         //GENERATE ID
         $this->gmlId = 'FIHO.INFORMATION.'.uniqid();
     }
+    
+ 
+    
 }
 
 ?>

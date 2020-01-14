@@ -34,7 +34,10 @@ abstract class ComplexAttributeType extends CommonS100Type
 {
     protected $attributes = array();
     
-    public function __construct(){}
+    public function __construct()
+    {
+        parent::__construct();
+    }
     
     /*
      * Value can be a simple attribute object or value, or a complex attribute object

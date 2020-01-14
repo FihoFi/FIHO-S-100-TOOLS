@@ -25,5 +25,5 @@
 ***************************************************************************
 */
   
-class AbstractInformationAssociation extends CommonS100Type{};
+class AbstractInformationAssociation extends ComplexAttributeType{};
 ?>

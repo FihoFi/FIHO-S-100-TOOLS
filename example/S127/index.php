@@ -25,6 +25,42 @@ $s127 = new S127TrafficService();
 //Create UKC- allowancearea
 $ukcAllowanceArea= new UnderkeelClearanceAllowanceArea();
 
+//XXX attribute of association does not print with GML (category Of Relationship)
+//Together with the Applicability, should be printed the PermissionType (sample below)
+/*
+<imember>
+<S127:PermissionType gml:id="JS.APPLIC.PERM.01">
+<S100:invInformationAssociation gml:id="JS.APPLIC.PERM.01.I.1" xlink:href="#JS.PILDST.01" xlink:arcrole="vslLocation"/>
+<S100:invInformationAssociation gml:id="JS.APPLIC.PERM.01.I.2" xlink:href="#JS.PILDST.02" xlink:arcrole="vslLocation"/>
+<categoryOfRelationship>required</categoryOfRelationship>
+<permission xlink:href="#JS.APPLIC.01" xlink:arcrole="permission"/>
+</S127:PermissionType>
+</imember>
+*/
+
+$app = new Applicability();
+
+//XXX Applicablity should require the PermissionType?
+
+$app->categoryOfVessel = 1;
+
+$vslMeasure = new vesselsMeasurements();
+    $vslMeasure->vesselsCharacteristics = 4; //draught
+    $vslMeasure->comparisonOperator = 4; //less than or equal to
+    $vslMeasure->vesselsCharacteristicsValue = 10.0; //draught
+    $vslMeasure->vesselsCharacteristicsUnit = 1; //metres
+$app->vesselsMeasurements = $vslMeasure;
+
+//Informationassociation
+$perm = new PermissionType();
+$perm->categoryOfRelationship = 3; //permitted
+
+//Class type is incorrrect?? 
+//$app->PermissionType_vslLocation_InformationType = $perm;
+
+$ukcAllowanceArea->PermissionType_permission_Applicability = $app;
+
+
 //add featureName
 $fn = new featureName();
 $fn->name = "UKC-area test";
@@ -62,7 +98,7 @@ $ukcAllowanceArea->underkeelAllowance = $ukc;
 
 //add Geometry
 $area = new Geometry();
-$area->addWkt('POLYGON ((25 60, 25.5 60.5, 25.2 60.2, 25 60, ))');
+$area->addWkt('POLYGON ((25 60, 25.5 60.5, 25.2 60.2, 25 60))');
 $ukcAllowanceArea->Geometry = $area;
     
 //add service
@@ -90,7 +126,7 @@ $traficom = createAuthority(
     null
     );
 
-$ukcManagementArea->SrvControl_controlAuthority = $traficom;
+$ukcManagementArea->SrvControl_controlAuthority_Authority = $traficom;
 
 //add geometry
 $manarea = new Geometry();
@@ -100,11 +136,27 @@ $ukcManagementArea->Geometry = $manarea;
 //add service
 $s127->services = $ukcManagementArea;
 
+//Contact details for PILBOP:s
+$conDet = new ContactDetails();
+$tCom = new telecommunications();
+$tCom->telecommunicationIdentifier = "+358 00 123 456";
+$conDet->telecommunications = $tCom;
+$oRes = new OnlineResource();
+$oRes->linkage = "http://pilotorders.fi";
+$conDet->onlineResource = $oRes;
+$addr = new ContactAddress();
+$addr->deliveryPoint = "Luotsikatu 3";
+$addr->postalCode = "01234";
+$addr->cityName = "Harmaja";
+$addr->countryName = "Finland";
+$conDet->contactAddress = $addr;
+
 //add pilbop
 $pilbop = new PilotBoardingPlace();
 $point = new Geometry();
 $point->addWkt('POINT (24.7 60.3)');
 $pilbop->Geometry = $point;
+$pilbop->SrvContact_theContactDetails_ContactDetails = $conDet;
 $s127->services = $pilbop;
 
 //add pilbop
@@ -112,7 +164,16 @@ $pilbop2 = new PilotBoardingPlace();
 $point2 = new Geometry();
 $point2->addWkt('POINT (24.945831 60.192059)');
 $pilbop2->Geometry = $point2;
+$pilbop2->SrvContact_theContactDetails_ContactDetails = $conDet;
 $s127->services = $pilbop2;
+
+//XXX Exception: Attribute names based on roles are duplicated in constructor!
+$archipelago_vts = new VesselTrafficServiceArea();
+$archipelago_vts->requirementsForMaintenanceOfListeningWatch = 'Vessel in transit shall listen to designated VTS- channel on VHF';
+$archipelago_vts_area = new Geometry();
+$archipelago_vts_area->addWkt('POLYGON ((21.1585 60.95333333, 20.77516667 60.95333333, 20.19833333 60.52833333, 19.87166667	60.03166667, 22.8835 60.10833333))');
+$archipelago_vts->Geometry = $archipelago_vts_area;
+$s127->services = $archipelago_vts;
 
 //Specific namespace-data for GML- printer
 $schemaLocation = 'xsi:schemaLocation="http://www.iho.int/S127/gml/cs0/1.0 ../../../../S100_GML/schemas/S127/1.0.0/20181129/S127.xsd"';

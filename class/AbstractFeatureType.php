@@ -28,7 +28,7 @@
 /**
  * @property Geometry[0..*] Geometry | The Geometry
  */
-abstract class AbstractFeatureType extends ComplexAttributeType
+abstract class AbstractFeatureType extends AbstractType
 {
     //GML ID
     public $gmlId = null;
@@ -38,6 +38,8 @@ abstract class AbstractFeatureType extends ComplexAttributeType
      */
     public function __construct()
     {
+        parent::__construct();
+        
         //Geometry must be added last
         $this->addAttribute('Geometry', 'Geometry', 0, MAX_OCCUR);
         

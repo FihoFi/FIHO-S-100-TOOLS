@@ -28,7 +28,7 @@ function createAuthority($category, $name, $description, $phone, $url, $address,
     $addr->cityName = $address[2];
     $addr->countryName = $address[3];
     $conDet->contactAddress = $addr;
-    $auth->AuthorityContact_theContactDetails = $conDet;
+    $auth->AuthorityContact_theContactDetails_ContactDetails = $conDet;
     
     $srvh = new ServiceHours();
     $sched = new scheduleByDayOfWeek();
@@ -70,9 +70,9 @@ function createAuthority($category, $name, $description, $phone, $url, $address,
     $varD = new dateVariable();
     $varD = "No service during public national holidays.";
     $nonSta->dateVariable = $varD;
-    $srvh->ExceptionalWorkday_partialWorkingDay = $nonSta;
+    $srvh->ExceptionalWorkday_partialWorkingDay_NonStandardWorkingDay = $nonSta;
     $srvh->scheduleByDayOfWeek = $sched;
-    $auth->AuthorityHours_theServiceHours = $srvh;
+    $auth->AuthorityHours_theServiceHours_ServiceHours = $srvh;
     return $auth;
 }
 ?>
