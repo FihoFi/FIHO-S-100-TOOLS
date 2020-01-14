@@ -190,11 +190,11 @@
 				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 				//FeatureBindings
-				<xsl:for-each select="S100FC:featureBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:featureType/@ref"/>', '<xsl:value-of select="S100FC:featureType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:for-each select="S100FC:featureBinding">$this->addFeatureBinding('<xsl:value-of select="S100FC:association/@ref"/>','<xsl:value-of select="S100FC:role/@ref"/>', '<xsl:value-of select="S100FC:featureType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
 				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if> );
 				</xsl:for-each>
 				//InformationBindings
-				<xsl:for-each select="S100FC:informationBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:informationType/@ref"/>', '<xsl:value-of select="S100FC:informationType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:for-each select="S100FC:informationBinding">$this->addInformationBinding('<xsl:value-of select="S100FC:association/@ref"/>', '<xsl:value-of select="S100FC:role/@ref"/>', '<xsl:value-of select="S100FC:informationType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
 				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 			}
@@ -231,11 +231,11 @@
 				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 				//FeatureBindings
-				<xsl:for-each select="S100FC:featureBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:featureType/@ref"/>', '<xsl:value-of select="S100FC:featureType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:for-each select="S100FC:featureBinding">$this->addFeatureBinding('<xsl:value-of select="S100FC:association/@ref"/>','<xsl:value-of select="S100FC:role/@ref"/>', '<xsl:value-of select="S100FC:featureType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
 				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if> );
 				</xsl:for-each>
 				//InformationBindings
-				<xsl:for-each select="S100FC:informationBinding">$this->addAttribute('<xsl:value-of select="S100FC:association/@ref"/>_<xsl:value-of select="S100FC:role/@ref"/>_<xsl:value-of select="S100FC:informationType/@ref"/>', '<xsl:value-of select="S100FC:informationType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
+				<xsl:for-each select="S100FC:informationBinding">$this->addInformationBinding('<xsl:value-of select="S100FC:association/@ref"/>', '<xsl:value-of select="S100FC:role/@ref"/>', '<xsl:value-of select="S100FC:informationType/@ref"/>', <xsl:value-of select="S100FC:multiplicity/S100Base:lower"/>, <xsl:value-of select="S100FC:multiplicity/S100Base:upper"/>
 				<xsl:if test="S100FC:multiplicity/S100Base:upper/@infinite='true'">MAX_OCCUR</xsl:if>);
 				</xsl:for-each>
 			}
@@ -247,6 +247,8 @@
 		/**
 		* Role
 		* <xsl:value-of select="S100FC:definition"/>
+		* 
+		* <xsl:value-of select="S100FC:remarks"/>
 		*/
 		class <xsl:value-of select="S100FC:code"/> extends AbstractRole{}
 	</xsl:for-each>

@@ -148,6 +148,14 @@ abstract class ComplexAttributeType extends CommonS100Type
     }
    
     /**
+     * Check whether any attributes are set.
+     * @return boolean
+     */
+    public function hasAttributes()
+    {
+        return count($this->attributes) > 0;
+    }
+    /**
      * Return all attributes, and reorder such that GEOMETRY comes last
      * @throws Exception
      * @return array

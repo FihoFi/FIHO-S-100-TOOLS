@@ -27,20 +27,14 @@
 
 abstract class AbstractInformationType extends AbstractType
 {
-    //GML ID
-    public $gmlId = null;
-    
     public function __construct()
     {
         
         parent::__construct();
         
         //GENERATE ID
-        $this->gmlId = 'FIHO.INFORMATION.'.uniqid();
+        $this->gmlId = 'FIHO.INFORMATION.TYPE.'.uniqid();
     }
-    
- 
-    
 }
 
 ?>

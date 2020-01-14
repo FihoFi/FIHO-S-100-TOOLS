@@ -3795,12 +3795,12 @@
 				$this->addAttribute('textContent', 'textContent', 0, 1);
 				
 				//FeatureBindings
-				$this->addAttribute('TextAssociation_positions_TextPlacement', 'TextPlacement', 0, 1 );
+				$this->addFeatureBinding('TextAssociation','positions', 'TextPlacement', 0, 1 );
 				
 				//InformationBindings
-				$this->addAttribute('PermissionType_permission_Applicability', 'Applicability', 0, MAX_OCCUR);
-				$this->addAttribute('AssociatedRxN_theRxN_AbstractRxN', 'AbstractRxN', 0, MAX_OCCUR);
-				$this->addAttribute('AdditionalInformation_providesInformation_NauticalInformation', 'NauticalInformation', 0, MAX_OCCUR);
+				$this->addInformationBinding('PermissionType', 'permission', 'Applicability', 0, MAX_OCCUR);
+				$this->addInformationBinding('AssociatedRxN', 'theRxN', 'AbstractRxN', 0, MAX_OCCUR);
+				$this->addInformationBinding('AdditionalInformation', 'providesInformation', 'NauticalInformation', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -3851,7 +3851,7 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('SrvContact_theContactDetails_ContactDetails', 'ContactDetails', 0, MAX_OCCUR);
+				$this->addInformationBinding('SrvContact', 'theContactDetails', 'ContactDetails', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -3904,7 +3904,7 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('SrvControl_controlAuthority_Authority', 'Authority', 0, 1);
+				$this->addInformationBinding('SrvControl', 'controlAuthority', 'Authority', 0, 1);
 				
 			}
 		}
@@ -3959,7 +3959,7 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('TrafficServRept_reptForTrafficServ_ShipReport', 'ShipReport', 0, MAX_OCCUR);
+				$this->addInformationBinding('TrafficServRept', 'reptForTrafficServ', 'ShipReport', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -4187,10 +4187,10 @@
 				$this->addAttribute('requirementsForMaintenanceOfListeningWatch', 'requirementsForMaintenanceOfListeningWatch', 1, 1);
 				
 				//FeatureBindings
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_RadioCallingInPoint', 'RadioCallingInPoint', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_RadarRange', 'RadarRange', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_SignalStationWarning', 'SignalStationWarning', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_SignalStationTraffic', 'SignalStationTraffic', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'RadioCallingInPoint', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'RadarRange', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'SignalStationWarning', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'SignalStationTraffic', 0, MAX_OCCUR );
 				
 				//InformationBindings
 				
@@ -4259,7 +4259,7 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('LocationHours_theServiceHours_ServiceHours', 'ServiceHours', 0, 1);
+				$this->addInformationBinding('LocationHours', 'theServiceHours', 'ServiceHours', 0, 1);
 				
 			}
 		}
@@ -4339,8 +4339,8 @@
 				$this->addAttribute('status', 'status', 0, MAX_OCCUR);
 				
 				//FeatureBindings
-				$this->addAttribute('PilotageDistrictAssociation_componentOf_PilotageDistrict', 'PilotageDistrict', 0, 1 );
-				$this->addAttribute('ServiceProvisionArea_serviceProvider_PilotService', 'PilotService', 0, MAX_OCCUR );
+				$this->addFeatureBinding('PilotageDistrictAssociation','componentOf', 'PilotageDistrict', 0, 1 );
+				$this->addFeatureBinding('ServiceProvisionArea','serviceProvider', 'PilotService', 0, MAX_OCCUR );
 				
 				//InformationBindings
 				
@@ -4416,11 +4416,11 @@
 				$this->addAttribute('noticeTime', 'noticeTime', 0, 1);
 				
 				//FeatureBindings
-				$this->addAttribute('ServiceProvisionArea_serviceArea_PilotageDistrict', 'PilotageDistrict', 0, 1 );
-				$this->addAttribute('ServiceProvisionArea_serviceArea_PilotBoardingPlace', 'PilotBoardingPlace', 0, MAX_OCCUR );
+				$this->addFeatureBinding('ServiceProvisionArea','serviceArea', 'PilotageDistrict', 0, 1 );
+				$this->addFeatureBinding('ServiceProvisionArea','serviceArea', 'PilotBoardingPlace', 0, MAX_OCCUR );
 				
 				//InformationBindings
-				$this->addAttribute('LocationHours_theServiceHours_ServiceHours', 'ServiceHours', 0, 1);
+				$this->addInformationBinding('LocationHours', 'theServiceHours', 'ServiceHours', 0, 1);
 				
 			}
 		}
@@ -4474,8 +4474,8 @@
 				$this->addAttribute('communicationChannel', 'communicationChannel', 0, MAX_OCCUR);
 				
 				//FeatureBindings
-				$this->addAttribute('PilotageDistrictAssociation_consistsOf_PilotBoardingPlace', 'PilotBoardingPlace', 0, MAX_OCCUR );
-				$this->addAttribute('ServiceProvisionArea_serviceProvider_PilotService', 'PilotService', 0, MAX_OCCUR );
+				$this->addFeatureBinding('PilotageDistrictAssociation','consistsOf', 'PilotBoardingPlace', 0, MAX_OCCUR );
+				$this->addFeatureBinding('ServiceProvisionArea','serviceProvider', 'PilotService', 0, MAX_OCCUR );
 				
 				//InformationBindings
 				
@@ -4656,9 +4656,9 @@
 				$this->addAttribute('status', 'status', 0, MAX_OCCUR);
 				
 				//FeatureBindings
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_VesselTrafficServiceArea', 'VesselTrafficServiceArea', 0, 1 );
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_LocalPortServiceArea', 'LocalPortServiceArea', 0, 1 );
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_ShipReportingServiceArea', 'ShipReportingServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'VesselTrafficServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'LocalPortServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'ShipReportingServiceArea', 0, 1 );
 				
 				//InformationBindings
 				
@@ -4734,9 +4734,9 @@
 				$this->addAttribute('trafficFlow', 'trafficFlow', 1, 1);
 				
 				//FeatureBindings
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_VesselTrafficServiceArea', 'VesselTrafficServiceArea', 0, 1 );
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_LocalPortServiceArea', 'LocalPortServiceArea', 0, 1 );
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_ShipReportingServiceArea', 'ShipReportingServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'VesselTrafficServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'LocalPortServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'ShipReportingServiceArea', 0, 1 );
 				
 				//InformationBindings
 				
@@ -4986,10 +4986,10 @@
 				$this->addAttribute('requirementsForMaintenanceOfListeningWatch', 'requirementsForMaintenanceOfListeningWatch', 1, 1);
 				
 				//FeatureBindings
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_RadioCallingInPoint', 'RadioCallingInPoint', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_RadarRange', 'RadarRange', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_SignalStationWarning', 'SignalStationWarning', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_SignalStationTraffic', 'SignalStationTraffic', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'RadioCallingInPoint', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'RadarRange', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'SignalStationWarning', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'SignalStationTraffic', 0, MAX_OCCUR );
 				
 				//InformationBindings
 				
@@ -5053,9 +5053,9 @@
 				$this->addAttribute('status', 'status', 0, MAX_OCCUR);
 				
 				//FeatureBindings
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_VesselTrafficServiceArea', 'VesselTrafficServiceArea', 0, 1 );
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_LocalPortServiceArea', 'LocalPortServiceArea', 0, 1 );
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_ShipReportingServiceArea', 'ShipReportingServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'VesselTrafficServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'LocalPortServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'ShipReportingServiceArea', 0, 1 );
 				
 				//InformationBindings
 				
@@ -5121,9 +5121,9 @@
 				$this->addAttribute('status', 'status', 0, MAX_OCCUR);
 				
 				//FeatureBindings
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_VesselTrafficServiceArea', 'VesselTrafficServiceArea', 0, 1 );
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_LocalPortServiceArea', 'LocalPortServiceArea', 0, 1 );
-				$this->addAttribute('TrafficControlServiceAggregation_componentOf_ShipReportingServiceArea', 'ShipReportingServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'VesselTrafficServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'LocalPortServiceArea', 0, 1 );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','componentOf', 'ShipReportingServiceArea', 0, 1 );
 				
 				//InformationBindings
 				
@@ -5306,10 +5306,10 @@
 				$this->addAttribute('requirementsForMaintenanceOfListeningWatch', 'requirementsForMaintenanceOfListeningWatch', 1, 1);
 				
 				//FeatureBindings
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_RadioCallingInPoint', 'RadioCallingInPoint', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_RadarRange', 'RadarRange', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_SignalStationWarning', 'SignalStationWarning', 0, MAX_OCCUR );
-				$this->addAttribute('TrafficControlServiceAggregation_consistsOf_SignalStationTraffic', 'SignalStationTraffic', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'RadioCallingInPoint', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'RadarRange', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'SignalStationWarning', 0, MAX_OCCUR );
+				$this->addFeatureBinding('TrafficControlServiceAggregation','consistsOf', 'SignalStationTraffic', 0, MAX_OCCUR );
 				
 				//InformationBindings
 				
@@ -5571,7 +5571,7 @@
 				$this->addAttribute('textType', 'textType', 0, 1);
 				
 				//FeatureBindings
-				$this->addAttribute('TextAssociation_identifies_FeatureType', 'FeatureType', 1, 1 );
+				$this->addFeatureBinding('TextAssociation','identifies', 'FeatureType', 1, 1 );
 				
 				//InformationBindings
 				
@@ -5622,7 +5622,7 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('AdditionalInformation_providesInformation_NauticalInformation', 'NauticalInformation', 0, MAX_OCCUR);
+				$this->addInformationBinding('AdditionalInformation', 'providesInformation', 'NauticalInformation', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -5679,8 +5679,8 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('InclusionType_isApplicableTo_Applicability', 'Applicability', 0, MAX_OCCUR);
-				$this->addAttribute('RelatedOrganisation_theOrganisation_AbstractRxN', 'AbstractRxN', 0, MAX_OCCUR);
+				$this->addInformationBinding('InclusionType', 'isApplicableTo', 'Applicability', 0, MAX_OCCUR);
+				$this->addInformationBinding('RelatedOrganisation', 'theOrganisation', 'AbstractRxN', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -5757,9 +5757,9 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('InclusionType_theApplicableRxN_AbstractRxN', 'AbstractRxN', 0, MAX_OCCUR);
-				$this->addAttribute('ReportReqmt_theShipReport_ShipReport', 'ShipReport', 0, MAX_OCCUR);
-				$this->addAttribute('PermissionType_vslLocation_InformationType', 'InformationType', 0, MAX_OCCUR);
+				$this->addInformationBinding('InclusionType', 'theApplicableRxN', 'AbstractRxN', 0, MAX_OCCUR);
+				$this->addInformationBinding('ReportReqmt', 'theShipReport', 'ShipReport', 0, MAX_OCCUR);
+				$this->addInformationBinding('PermissionType', 'vslLocation', 'InformationType', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -5814,10 +5814,10 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('AuthorityContact_theContactDetails_ContactDetails', 'ContactDetails', 0, MAX_OCCUR);
-				$this->addAttribute('ReptAuthority_theShipReport_ShipReport', 'ShipReport', 0, MAX_OCCUR);
-				$this->addAttribute('RelatedOrganisation_theInformation_AbstractRxN', 'AbstractRxN', 0, MAX_OCCUR);
-				$this->addAttribute('AuthorityHours_theServiceHours_ServiceHours', 'ServiceHours', 0, MAX_OCCUR);
+				$this->addInformationBinding('AuthorityContact', 'theContactDetails', 'ContactDetails', 0, MAX_OCCUR);
+				$this->addInformationBinding('ReptAuthority', 'theShipReport', 'ShipReport', 0, MAX_OCCUR);
+				$this->addInformationBinding('RelatedOrganisation', 'theInformation', 'AbstractRxN', 0, MAX_OCCUR);
+				$this->addInformationBinding('AuthorityHours', 'theServiceHours', 'ServiceHours', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -5896,7 +5896,7 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('AuthorityContact_theAuthority_Authority', 'Authority', 0, MAX_OCCUR);
+				$this->addInformationBinding('AuthorityContact', 'theAuthority', 'Authority', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -5951,7 +5951,7 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('AdditionalInformation_informationProvidedFor_InformationType', 'InformationType', 0, MAX_OCCUR);
+				$this->addInformationBinding('AdditionalInformation', 'informationProvidedFor', 'InformationType', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -6051,8 +6051,8 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('ExceptionalWorkday_partialWorkingDay_NonStandardWorkingDay', 'NonStandardWorkingDay', 0, MAX_OCCUR);
-				$this->addAttribute('AuthorityHours_theAuthority_srvHrs_Authority', 'Authority', 0, MAX_OCCUR);
+				$this->addInformationBinding('ExceptionalWorkday', 'partialWorkingDay', 'NonStandardWorkingDay', 0, MAX_OCCUR);
+				$this->addInformationBinding('AuthorityHours', 'theAuthority_srvHrs', 'Authority', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -6109,8 +6109,8 @@
 				//FeatureBindings
 				
 				//InformationBindings
-				$this->addAttribute('ReportReqmt_mustBeFiledBy_Applicability', 'Applicability', 0, MAX_OCCUR);
-				$this->addAttribute('ReptAuthority_reportTo_Authority', 'Authority', 0, MAX_OCCUR);
+				$this->addInformationBinding('ReportReqmt', 'mustBeFiledBy', 'Applicability', 0, MAX_OCCUR);
+				$this->addInformationBinding('ReptAuthority', 'reportTo', 'Authority', 0, MAX_OCCUR);
 				
 			}
 		}
@@ -6352,198 +6352,264 @@
 		/**
 		* Role
 		* A pointer to the aggregate in a whole-part relationship.
+		* 
+		* Definition may need to be discussed with S-101 team and GI registry manager
 		*/
 		class componentOf extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to a part in a whole-part relationship
+		* 
+		* Definition may need to be discussed with S-101 team and GI registry manager
 		*/
 		class consistsOf extends AbstractRole{}
 	
 		/**
 		* Role
 		* The applicable regulation, restriction, recommendation or nautical information
+		* 
+		* 
 		*/
 		class theApplicableRxN extends AbstractRole{}
 	
 		/**
 		* Role
 		* The location in which the information item applies
+		* 
+		* 
 		*/
 		class appliesInLocation extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to an Authority object
+		* 
+		* 
 		*/
 		class theAuthority extends AbstractRole{}
 	
 		/**
 		* Role
 		* The authority for which service hours are given
+		* 
+		* 
 		*/
 		class theAuthority_srvHrs extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to an Contact Details object
+		* 
+		* 
 		*/
 		class theContactDetails extends AbstractRole{}
 	
 		/**
 		* Role
 		* The controlling organization or authority for a geographically located service
+		* 
+		* 
 		*/
 		class controlAuthority extends AbstractRole{}
 	
 		/**
 		* Role
 		* The service controlled by an organisation or authority
+		* 
+		* 
 		*/
 		class controlledService extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to a specific spatial type(s).
+		* 
+		* 
 		*/
 		class definedFor extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to an information type providing spatial quality information.
+		* 
+		* 
 		*/
 		class defines extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to a specific feature(s).
+		* 
+		* 
 		*/
 		class identifies extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to a specific feature(s) for which further information is required.
+		* 
+		* 
 		*/
 		class informationProvidedFor extends AbstractRole{}
 	
 		/**
 		* Role
 		* The object or class of objects to which the regulation, restriction, recommendation, or nautical information applies
+		* 
+		* 
 		*/
 		class isApplicableTo extends AbstractRole{}
 	
 		/**
 		* Role
 		* The location for which service hours are given
+		* 
+		* 
 		*/
 		class location_srvHrs extends AbstractRole{}
 	
 		/**
 		* Role
 		* Information related to an organisation
+		* 
+		* 
 		*/
 		class theInformation extends AbstractRole{}
 	
 		/**
 		* Role
 		* The organisation to which information relates
+		* 
+		* 
 		*/
 		class theOrganisation extends AbstractRole{}
 	
 		/**
 		* Role
 		* The work hours for a non-standard workday
+		* 
+		* 
 		*/
 		class partialWorkingDay extends AbstractRole{}
 	
 		/**
 		* Role
 		* The permissions for a location
+		* 
+		* 
 		*/
 		class permission extends AbstractRole{}
 	
 		/**
 		* Role
 		* The class (generally, qualifying vessels) which must file the report
+		* 
+		* 
 		*/
 		class mustBeFiledBy extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to a specific cartographically positioned location for text.
+		* 
+		* 
 		*/
 		class positions extends AbstractRole{}
 	
 		/**
 		* Role
 		* A pointer to an object that provides more information about the referencing feature or information type.
+		* 
+		* 
 		*/
 		class providesInformation extends AbstractRole{}
 	
 		/**
 		* Role
 		* The feature pertaining to a report
+		* 
+		* Encodable only as a generic association in 3.0.0 datasets as it is an information->feature link. Example: reference to a controlled area which requires a report to be filed upon entry and departure
 		*/
 		class reptForLocation extends AbstractRole{}
 	
 		/**
 		* Role
 		* The organisation or place to which a report is sent.
+		* 
+		* 
 		*/
 		class reportTo extends AbstractRole{}
 	
 		/**
 		* Role
 		* The regulation, restriction, recommendation, or nautical information
+		* 
+		* 
 		*/
 		class theRxN extends AbstractRole{}
 	
 		/**
 		* Role
 		* Service hours for an authority ore service provider
+		* 
+		* 
 		*/
 		class theServiceHours extends AbstractRole{}
 	
 		/**
 		* Role
 		* The usual service hours to which an exception applies
+		* 
+		* 
 		*/
 		class theServiceHours_nsdy extends AbstractRole{}
 	
 		/**
 		* Role
 		* Pointer to service or facility
+		* 
+		* Distinction: serviceArea (area served by a provider)
 		*/
 		class servicePlace extends AbstractRole{}
 	
 		/**
 		* Role
 		* The area served by a service provider.
+		* 
+		* Distinction: servicePlace (the facility for which contact information is provided)
 		*/
 		class serviceArea extends AbstractRole{}
 	
 		/**
 		* Role
 		* Pointer to a feature from where a provider supplies a service.
+		* 
+		* 
 		*/
 		class serviceProvider extends AbstractRole{}
 	
 		/**
 		* Role
 		* The report to be filed by a vessel
+		* 
+		* 
 		*/
 		class theShipReport extends AbstractRole{}
 	
 		/**
 		* Role
 		* The report for a traffic service
+		* 
+		* 
 		*/
 		class reptForTrafficServ extends AbstractRole{}
 	
 		/**
 		* Role
 		* The location to which the permission statement applies
+		* 
+		* Implementations must use between Applicability and PermissionType objects, not to feature instance. The PermissionType->feature link is via a generic inverse association
 		*/
 		class vslLocation extends AbstractRole{}
 	

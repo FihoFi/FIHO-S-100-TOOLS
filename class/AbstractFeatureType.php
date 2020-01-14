@@ -30,8 +30,7 @@
  */
 abstract class AbstractFeatureType extends AbstractType
 {
-    //GML ID
-    public $gmlId = null;
+    
 
     /**
      * @property Geometry[0..*] Geometry | The Geometry
@@ -40,11 +39,13 @@ abstract class AbstractFeatureType extends AbstractType
     {
         parent::__construct();
         
+        //GENERATE ID
+        $this->gmlId = 'FIHO.FEATURE.TYPE.'.uniqid();
+        
         //Geometry must be added last
         $this->addAttribute('Geometry', 'Geometry', 0, MAX_OCCUR);
         
-        //GENERATE ID
-        $this->gmlId = 'FIHO.FEATURE.'.uniqid();
+        
     }
 }
 

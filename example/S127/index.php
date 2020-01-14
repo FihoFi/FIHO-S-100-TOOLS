@@ -25,41 +25,27 @@ $s127 = new S127TrafficService();
 //Create UKC- allowancearea
 $ukcAllowanceArea= new UnderkeelClearanceAllowanceArea();
 
-//XXX attribute of association does not print with GML (category Of Relationship)
-//Together with the Applicability, should be printed the PermissionType (sample below)
-/*
-<imember>
-<S127:PermissionType gml:id="JS.APPLIC.PERM.01">
-<S100:invInformationAssociation gml:id="JS.APPLIC.PERM.01.I.1" xlink:href="#JS.PILDST.01" xlink:arcrole="vslLocation"/>
-<S100:invInformationAssociation gml:id="JS.APPLIC.PERM.01.I.2" xlink:href="#JS.PILDST.02" xlink:arcrole="vslLocation"/>
-<categoryOfRelationship>required</categoryOfRelationship>
-<permission xlink:href="#JS.APPLIC.01" xlink:arcrole="permission"/>
-</S127:PermissionType>
-</imember>
-*/
+//14.1.2020 SE TEST OF APPLICABILITY
 
 $app = new Applicability();
-
-//XXX Applicablity should require the PermissionType?
-
 $app->categoryOfVessel = 1;
-
-$vslMeasure = new vesselsMeasurements();
+  $vslMeasure = new vesselsMeasurements();
     $vslMeasure->vesselsCharacteristics = 4; //draught
     $vslMeasure->comparisonOperator = 4; //less than or equal to
     $vslMeasure->vesselsCharacteristicsValue = 10.0; //draught
     $vslMeasure->vesselsCharacteristicsUnit = 1; //metres
 $app->vesselsMeasurements = $vslMeasure;
 
-//Informationassociation
+//InformationAssociation PermissionType has an attribute => direct association not possible
+//In this case, instead of the Applicability- object, the PermissionType must be added as attribute
 $perm = new PermissionType();
 $perm->categoryOfRelationship = 3; //permitted
 
-//Class type is incorrrect?? 
-//$app->PermissionType_vslLocation_InformationType = $perm;
+//The actual Applicability object is added to the Association as "associatedType"
+$perm->associatedType = $app;
 
-$ukcAllowanceArea->PermissionType_permission_Applicability = $app;
-
+//permission is added to area
+$ukcAllowanceArea->PermissionType_permission_Applicability = $perm;
 
 //add featureName
 $fn = new featureName();

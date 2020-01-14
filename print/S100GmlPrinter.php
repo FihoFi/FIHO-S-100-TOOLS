@@ -164,11 +164,18 @@ class S100GmlPrinter
             //iterate alla instances (as populated in this product)
             foreach($attribute['instances'] as $instance)
             {
-
-                //Print feature or information <member> or <imember>
-                if ($instance instanceOf AbstractFeatureType || $instance instanceOf AbstractInformationType)
+                //Print feature / information
+                if ($instance instanceOf AbstractType)
                 {
-                    $this->printFeature($parentNode, $attribute, $instance);
+                    $newParent = $this->printFeature($parentNode, $attribute, $instance);
+                    
+                    //if associationClass, print also the referenced feature
+                    if($instance instanceOf AbstractInformationAssociation ||
+                        $instance instanceOf AbstractFeatureAssociation)
+                    {
+                        //use same "attribute parameters" as parent, but the associated object as instance
+                        $this->printFeature($newParent, $attribute, $instance->associatedType);
+                    }
                 }
                 
                 //Print Complex attribute, it has no final values
@@ -182,6 +189,8 @@ class S100GmlPrinter
                 {   
                    $this->printSimple($parentNode, $instance);
                 }
+                
+                
             }
         }
     }
@@ -255,7 +264,11 @@ class S100GmlPrinter
         
         //Print this object ONLY if it has not already been printed
         if (!$isDuplicate)
+        {
             $this->printObject($instance->getAllAttributes(), $node, $instance->gmlId); //pass node as parent to children
+        }
+        
+        return $node;
     }
     
     /**
