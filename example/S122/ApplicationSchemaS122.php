@@ -9,6 +9,7 @@ include (CLASS_PATH.'SimpleAttributeType.php');
 include (CLASS_PATH.'EnumerationType.php');
 include (CLASS_PATH.'CodeListType.php');
 include (CLASS_PATH.'ComplexAttributeType.php');
+include (CLASS_PATH.'AbstractType.php');
 include (CLASS_PATH.'AbstractFeatureType.php');
 include (CLASS_PATH.'AbstractInformationType.php');
 include (CLASS_PATH.'AbstractInformationAssociation.php');
