@@ -139,6 +139,9 @@ class S100GmlPrinter
         if ($this->productName == "S128")
             $gmlString = str_replace('Dataset', 'DataSet', $gmlString);
         
+		if ($this->productName == "S201")
+            $gmlString = str_replace('Dataset', 'DataSet', $gmlString);
+        
         return trim($gmlString);
     }
     
@@ -242,11 +245,35 @@ class S100GmlPrinter
             $xlink_href = "#".$instance->gmlId;
             $xlink_role = $this->rolesNs;
             
-            //add ref to parent
-            $ref = $parentNode->addChild($rolenames[1], null, $this->defaultNs);
-            $ref->addAttribute('xlink:href', $xlink_href, "http://www.w3.org/1999/xlink");
-            $ref->addAttribute('xlink:arcrole', $xlink_role.$rolenames[1], "http://www.w3.org/1999/xlink");
+            $xlink_needed = true; //assume needed
             
+            //check if this XLINK was already added
+            foreach($parentNode->children() as $tag=>$child)
+            {
+                //child already exists
+               if ($tag == $rolenames[1])
+               {
+                   //check if attribute value is same
+                   foreach($child->attributes('xlink', true) as $attr=>$val)
+                   {
+                       
+                       if($attr == "href" && $val == $xlink_href)
+                       {
+                           $xlink_needed = false;
+                           break;
+                       }
+                       
+                   }
+               }
+            }
+                
+            //add ref to parent
+            if ($xlink_needed)
+            {
+                $ref = $parentNode->addChild($rolenames[1], null, $this->defaultNs);
+                $ref->addAttribute('xlink:href', $xlink_href, "http://www.w3.org/1999/xlink");
+                $ref->addAttribute('xlink:arcrole', $xlink_role.$rolenames[1], "http://www.w3.org/1999/xlink");
+            }
             //$arc_xlink_href = "#".$parentGmlId;
             //add arc-ref to node
             //XXX ABILITY TO PRINT ARCREF, BUT INVALID BY XSD
