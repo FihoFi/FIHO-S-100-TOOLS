@@ -39,9 +39,6 @@ abstract class AbstractFeatureType extends AbstractType
     {
         parent::__construct();
         
-        //GENERATE ID
-        $this->gmlId = 'FIHO.FEATURE.TYPE.'.uniqid();
-        
         //Geometry must be added last
         $this->addAttribute('Geometry', 'Geometry', 0, MAX_OCCUR);
         

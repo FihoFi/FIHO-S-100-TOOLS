@@ -10,6 +10,9 @@ abstract class AbstractType extends ComplexAttributeType
     public function __construct()
     {
         parent::__construct();
+        
+        //GENERATE ID
+        $this->gmlId = 'fiho.'.get_class($this).'.'.CommonS100Type::nextId();
     }
     /**
      * 

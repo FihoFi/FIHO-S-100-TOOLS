@@ -32,9 +32,6 @@ class AbstractInformationAssociation extends AbstractType
     public function __construct()
     {
         parent::__construct();
-        
-        //GENERATE ID
-        $this->gmlId = 'FIHO.INFORMATION.ASSOC.'.uniqid();
     }
     
 };

@@ -31,9 +31,6 @@ abstract class AbstractInformationType extends AbstractType
     {
         
         parent::__construct();
-        
-        //GENERATE ID
-        $this->gmlId = 'FIHO.INFORMATION.TYPE.'.uniqid();
     }
 }
 

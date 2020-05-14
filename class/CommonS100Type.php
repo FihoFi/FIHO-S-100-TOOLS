@@ -30,6 +30,13 @@
  */
 abstract class CommonS100Type
 {
+    private static $currentId = 1;
+    
+    public static function nextId()
+    {
+        return sprintf('%04d', self::$currentId++);
+    }
+    
     public function __construct(){}
     
     public function getFamilyTree()

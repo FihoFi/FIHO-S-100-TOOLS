@@ -71,6 +71,10 @@ abstract class SimpleAttributeType extends CommonS100Type
      */
     public function oPrint()
     {
+        //print true / false for boolean
+        if(is_boolean($this->value))
+            return $this->value ? 'true' : 'false';
+        
         return $this->value;
     }
 }
