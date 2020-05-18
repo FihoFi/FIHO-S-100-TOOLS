@@ -27,7 +27,7 @@
 
 /**
  * Class prints the object as GML
- * @author Stefan Engström
+ * @author Stefan Engstrï¿½m
  *
  */
 class S100GmlPrinter
