@@ -52,7 +52,7 @@ class S100GmlPrinter
     
     private $epsg = 'urn:ogc:def:crs:EPSG:4326';
    
-    function __construct ($rootClass, $productName = null, $productNs = null, $rolesNs = null, $title = null, $abstract=null, $schemaLocation=null)
+    function __construct ($rootClass, $productName = null, $productNs = null, $rolesNs = null, $title = null, $abstract=null, $schemaLocation=null, $rootName = "Dataset")
     {
         $this->rootClass = $rootClass;
         $this->gmlId = 'FIHO.GML.'.uniqid();
@@ -65,14 +65,14 @@ class S100GmlPrinter
         $this->abstract = ( $abstract == null ) ? $this->abstract : $abstract;
         $this->schemaLocation = ( $schemaLocation == null ) ? $this->schemaLocation : $schemaLocation;
     
-        $this->initializeXML();
+        $this->initializeXML($rootName);
 
     }
      
-        function initializeXML()
+        function initializeXML($rootName = "Dataset")
         {
             $stub = '<?xml version="1.0"?>
-            <{$this->productName}:Dataset {$this->schemaLocation}
+            <{$this->productName}:'.$rootName.' {$this->schemaLocation}
             xmlns="{$this->defaultNs}"
             xmlns:{$this->productName}="{$this->productNs}"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -81,7 +81,7 @@ class S100GmlPrinter
             xmlns:s100_profile="http://www.iho.int/S-100/profile/s100_gmlProfile"
             xmlns:xlink="http://www.w3.org/1999/xlink"
             gml:id="{$this->gmlId}">
-            </{$this->productName}:Dataset>';
+            </{$this->productName}:'.$rootName.'>';
                 
             $stub = str_replace('{$this->productName}', $this->productName, $stub);
             $stub = str_replace('{$this->schemaLocation}', $this->schemaLocation, $stub);

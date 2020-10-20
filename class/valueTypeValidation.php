@@ -42,11 +42,31 @@ function is_boolean($value)
 function is_time($value)
 {
     //allow colon
-    $pattern = '/^([01]?[0-9]|2[0-3]):?[0-5][0-9](:?[0-5][0-9])?/';
+    $pattern = '/^([01]?[0-9]|2[0-4]):?[0-5][0-9](:?[0-5][0-9])?/';
+    return (preg_match($pattern, $value) == 1);
+}
+
+function is_datetime($value)
+{
+    //allow colon
+    $pattern = '/^([01]?[0-9]|2[0-4]):?[0-5][0-9](:?[0-5][0-9])?/';
     return (preg_match($pattern, $value) == 1);
 }
 
 function is_URL($value)
+{
+    //XXX accept any string
+    return is_string($value);
+}
+
+function is_URN($value)
+{
+    //XXX accept any string
+    return is_string($value);
+}
+
+
+function is_S100_TruncatedDate($value)
 {
     //XXX accept any string
     return is_string($value);
