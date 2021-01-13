@@ -368,18 +368,21 @@ class S100GmlPrinter
             break;
         
         case 'LINE':
-            
+           
+            //23.12.2020 print LINE as CURVE
             $geometry = $parentNode->addChild('geometry', null, $this->defaultNs);
-            $line = $geometry->addChild('lineProperty',null,$this->s100Ns);
-            $string = $line->addChild('LineString',null, $this->gmlNs);
-            $string->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
-            $string->addAttribute('srsDimension', '2');
-            $string->addAttribute('srsName', $this->epsg);
-            
+            $curveProp = $geometry->addChild('S100:curveProperty',null,$this->s100Ns);
+            $curve = $curveProp->addChild('S100:Curve',null, $this->s100Ns);
+                $curve->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
+                $curve->addAttribute('srsDimension', '2');
+                $curve->addAttribute('srsName', $this->epsg);
+            $curveSeg = $curve->addChild('segments',null,$this->gmlNs);
+            $line = $curveSeg->addChild('LineStringSegment',null,$this->gmlNs);
+             
             //add positions
-            $string->addChild('posList',$positions, $this->gmlNs);
+            $line->addChild('posList',$positions, $this->gmlNs);
             break;
-            
+                      
         case 'SURFACE':
             
             $geometry = $parentNode->addChild('geometry', null, $this->defaultNs);
