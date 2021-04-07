@@ -46,6 +46,12 @@ function is_time($value)
     return (preg_match($pattern, $value) == 1);
 }
 
+function is_date($value)
+{
+    //allow colon XXX
+    return true;
+}
+
 function is_datetime($value)
 {
     //allow colon

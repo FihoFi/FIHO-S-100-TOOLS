@@ -52,7 +52,14 @@ class S100GmlPrinter
     
     private $epsg = 'urn:ogc:def:crs:EPSG:4326';
    
-    function __construct ($rootClass, $productName = null, $productNs = null, $rolesNs = null, $title = null, $abstract=null, $schemaLocation=null, $rootName = "Dataset")
+    private $useOptionalMemberTags = true;
+    private $useProductNsOnMemberTags = true;
+    
+    
+    function __construct ($rootClass, $productName = null, $productNs = null, $rolesNs = null, 
+            $title = null, $abstract=null, $schemaLocation=null, $rootName = "Dataset",
+        $useOptionalMemberTags = true, $useProductNsOnMeberTags = true
+        )
     {
         $this->rootClass = $rootClass;
         $this->gmlId = 'FIHO.GML.'.uniqid();
@@ -65,6 +72,9 @@ class S100GmlPrinter
         $this->abstract = ( $abstract == null ) ? $this->abstract : $abstract;
         $this->schemaLocation = ( $schemaLocation == null ) ? $this->schemaLocation : $schemaLocation;
     
+        $this->useOptionalMemberTags = $useOptionalMemberTags;
+        $this->useProductNsOnMemberTags = $useProductNsOnMeberTags;
+        
         $this->initializeXML($rootName);
 
     }
@@ -135,10 +145,7 @@ class S100GmlPrinter
         //remove default xmlns- declaration, needed for correct behaviour of SimpleXML
         $gmlString = str_replace('xmlns="'.$this->defaultNs.'"', '', $gmlString);
                 
-        //XXX different in S128 0.7.5
-        if ($this->productName == "S128")
-            $gmlString = str_replace('Dataset', 'DataSet', $gmlString);
-        
+        //XXX
 		if ($this->productName == "S201")
             $gmlString = str_replace('Dataset', 'DataSet', $gmlString);
         
@@ -222,9 +229,20 @@ class S100GmlPrinter
             //features in member
             $memberType = $instance instanceOf AbstractFeatureType ? 'member' : 'imember';
             
+            //assume no optional <member> / <imember> wrappers
+            $newParentNode = $this->xml;
+            
             //add current feature as a new iMember at root- level
-            $newParentNode = $this->xml->addChild($memberType, null, $this->defaultNs);
-            $node = $newParentNode->addChild(get_class($instance), null, $this->productNs); // get the type of the object
+            if ($this->useOptionalMemberTags)
+            {
+                $newParentNode = $this->xml->addChild($memberType, null, $this->defaultNs);
+            }
+            
+            
+            $memberNamespace = $this->useProductNsOnMemberTags ? $this->productNs : $this->defaultNs;
+            
+            $node = $newParentNode->addChild(get_class($instance), null,  $memberNamespace); // get the type of the object
+            
             $node->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
             
             //add node to list, and reference list to not print again
