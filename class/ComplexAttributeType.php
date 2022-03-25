@@ -71,6 +71,18 @@ abstract class ComplexAttributeType extends CommonS100Type
             //add object to next position in array
             $this->attributes[$name]['instances'][] = $value;
             
+            //If object is a Geometry, add restrictions from array if set
+            if ($name == 'Geometry')
+            {
+                //check for existing entries set in AbstractFeatureType
+                //$featureUseType = isset($this->attributes['Geometry']['featureUseType']) ? $this->attributes['Geometry']['featureUseType'] : null;
+                
+                if (isset($this->attributes['Geometry']['permittedPrimitives']))
+                {
+                    $value->setPermittedPrimitives($this->attributes['Geometry']['permittedPrimitives']);
+                }
+            }
+                
             //TODO: Maybe.. 
             // If added object is FeatureType or InformationType it is an association
             // if $crossAddAssoc == true then add also $this into the other object

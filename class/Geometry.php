@@ -28,6 +28,7 @@
 class Geometry extends CommonS100Type
 {
     private $wkt = null;
+    private $permittedPrimitivesArr = array('point', 'curve', 'surface');
     
     //GML ID
     public $gmlId = null;
@@ -44,6 +45,15 @@ class Geometry extends CommonS100Type
             throw new Exception("Position is not a WKT-string");
             
         $this->wkt = $wkt;
+    }
+    
+    /*
+     * Set the permitted primitives accordint to S-100, assumed values include
+     * noGeometry, point, pointSet, curve, surface, coverage
+     */
+    public function setPermittedPrimitives($permittedPrimitivesArr)
+    {
+        $this->permittedPrimitivesArr = $permittedPrimitivesArr;
     }
     
     //Return WKT as Poslist
@@ -72,14 +82,20 @@ class Geometry extends CommonS100Type
         switch (substr($this->wkt, 0, 5))
         {
             case 'POINT':
+                if (!in_array('point', $this->permittedPrimitivesArr))
+                    throw new Exception('Geometry: '. $this->wkt.' is not supported by this FeatureType');
                 return 'POINT'; 
                 break;
             
             case 'POLYG':
-                return 'SURFACE';
+                if (!in_array('surface', $this->permittedPrimitivesArr))
+                    throw new Exception('Geometry: '. $this->wkt.' is not supported by this FeatureType');
+                    return 'SURFACE';
                 break;
                 
             case 'LINES':
+                if (!in_array('curve', $this->permittedPrimitivesArr))
+                    throw new Exception('Geometry: '. $this->wkt.' is not supported by this FeatureType');
                 return 'LINE';
                 break;
             

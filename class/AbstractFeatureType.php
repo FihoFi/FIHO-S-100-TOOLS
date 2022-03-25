@@ -30,19 +30,21 @@
  */
 abstract class AbstractFeatureType extends AbstractType
 {
-    
-
-    /**
+        /**
      * @property Geometry[0..*] Geometry | The Geometry
      */
     public function __construct()
     {
         parent::__construct();
         
-        //Geometry must be added last
+        //Geometry must be added last, and only one instance
         $this->addAttribute('Geometry', 'Geometry', 0, MAX_OCCUR);
-        
-        
+    }
+    
+    public function setGeometry($featureUseType, $permittedPrimitives)
+    {
+        $this->attributes['Geometry']['featureUseType'] = $featureUseType;
+        $this->attributes['Geometry']['permittedPrimitives'] = $permittedPrimitives;
     }
 }
 
