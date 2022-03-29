@@ -25,6 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
 /*
  * Enumeration is a special case of the simple attribute type.
  * Enumeration values and descriptions are added upon construction.
@@ -67,6 +69,5 @@ abstract class EnumerationType extends SimpleAttributeType
 	    return $this->description;
 	}
 }
-
-
+}
 ?>

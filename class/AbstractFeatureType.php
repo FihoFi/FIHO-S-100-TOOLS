@@ -25,6 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
 /**
  * @property Geometry[0..*] Geometry | The Geometry
  */
@@ -47,5 +49,5 @@ abstract class AbstractFeatureType extends AbstractType
         $this->attributes['Geometry']['permittedPrimitives'] = $permittedPrimitives;
     }
 }
-
+}
 ?>

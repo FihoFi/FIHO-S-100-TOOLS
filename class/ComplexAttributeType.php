@@ -25,6 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
 /*
  * The complex attribute is a container of other Simple or Complex attributes.
  * Each attribute must be initialized in the constructor of a subclass.
@@ -136,6 +138,7 @@ abstract class ComplexAttributeType extends CommonS100Type
      */
     protected function addAttribute($name, $type = null, $minOccur = 0, $maxOccur = 1, $ordered = false)
     {
+        
         if ($this->exists($name))
         {
             throw(new Exception("Attribute already exists"));
@@ -143,11 +146,13 @@ abstract class ComplexAttributeType extends CommonS100Type
         
         $type = ($type == null) ? $name : $type;
         
+        $type = 'fiho\\s100\\'.$type;
+        
          //XXX Recursive object- creation uses too much resources.
          //Validate the object as Simple or Complex type
         //if (!new $type() instanceOf SimpleAttributeType && !new $type() instanceOf ComplexAttributeType)
         
-        if (!is_subclass_of($type, 'CommonS100Type'))
+        if (!is_subclass_of($type, 'fiho\\s100\\CommonS100Type'))
         {
            throw new Exception("$type is not a valid attribute class");
         }
@@ -203,5 +208,5 @@ abstract class ComplexAttributeType extends CommonS100Type
         return null;
     }
 }
-	
+}
 ?>

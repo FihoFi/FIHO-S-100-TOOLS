@@ -17,7 +17,7 @@ include (FIHO_TOOLS_CLASS_PATH.'AbstractFeatureAssociation.php');
 include (FIHO_TOOLS_CLASS_PATH.'AbstractRole.php');
 include (FIHO_TOOLS_CLASS_PATH.'Geometry.php');
 include (FIHO_TOOLS_CLASS_PATH.'valueTypeValidation.php');
+include (FIHO_TOOLS_CLASS_PATH.'Exception.php');
 
 include (FIHO_TOOLS_PRINT_PATH.'S100GmlPrinter.php');
-
 ?>

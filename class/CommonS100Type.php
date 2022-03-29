@@ -25,6 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
 /*
  * Base class for all S-100 types
  */
@@ -60,5 +62,5 @@ abstract class CommonS100Type
         return null;
     }
 }
-
+}
 ?>

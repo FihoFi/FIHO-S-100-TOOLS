@@ -24,7 +24,9 @@
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************
 */
-  
+ 
+namespace fiho\s100
+{
 class AbstractInformationAssociation extends AbstractType
 {
     public $associatedType;
@@ -34,5 +36,6 @@ class AbstractInformationAssociation extends AbstractType
         parent::__construct();
     }
     
-};
+}
+}
 ?>

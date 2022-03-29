@@ -25,6 +25,9 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
+    
 class Geometry extends CommonS100Type
 {
     private $wkt = null;
@@ -36,7 +39,7 @@ class Geometry extends CommonS100Type
     public function __construct()
     {
         //GENERATE ID
-        $this->gmlId = 'fiho.'.get_class($this).'.'.CommonS100Type::nextId();
+        $this->gmlId = str_replace('\\', '.', get_class($this)).'.'.CommonS100Type::nextId();
     }
     
     public function addWKT($wkt)
@@ -110,5 +113,5 @@ class Geometry extends CommonS100Type
         return $this->getPosList($invert);
     }
 }
-
+}
 ?>

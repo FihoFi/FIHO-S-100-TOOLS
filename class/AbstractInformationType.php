@@ -25,6 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
 abstract class AbstractInformationType extends AbstractType
 {
     public function __construct()
@@ -33,5 +35,5 @@ abstract class AbstractInformationType extends AbstractType
         parent::__construct();
     }
 }
-
+}
 ?>

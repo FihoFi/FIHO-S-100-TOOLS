@@ -25,6 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
 class AbstractFeatureAssociation extends AbstractType
 {
     public $associatedType;
@@ -34,5 +36,6 @@ class AbstractFeatureAssociation extends AbstractType
         parent::__construct();
  
     }
-};
+}
+}
 ?>

@@ -25,6 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
  /*
   * The simple type is the basic building- block of all attributes
   * Simple types have only one value, and a specific validation function
@@ -77,4 +79,5 @@ abstract class SimpleAttributeType extends CommonS100Type
         
         return $this->value;
     }
+}
 }

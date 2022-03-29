@@ -25,5 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100
+{
 class AbstractRole extends CommonS100Type{};
+}
 ?>

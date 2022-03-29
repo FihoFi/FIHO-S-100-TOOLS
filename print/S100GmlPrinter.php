@@ -25,6 +25,8 @@
 ***************************************************************************
 */
 
+namespace fiho\s100;
+
 /**
  * Class prints the object as GML
  * @author Stefan Engstr�m
@@ -101,7 +103,7 @@ class S100GmlPrinter
             $stub = str_replace('{$this->gmlId}', $this->gmlId, $stub);
             
             // creating object of SimpleXMLElement
-            $doc = new SimpleXMLElement($stub);
+            $doc = new \SimpleXMLElement($stub);
         
         $this->xml = $doc;
     }
@@ -128,7 +130,7 @@ class S100GmlPrinter
          */
         
         //Prettyprint XML- document
-        $xmlDomDoc = new DomDocument('1.0');
+        $xmlDomDoc = new \DomDocument('1.0');
         $xmlDomDoc->preserveWhiteSpace = false;
         $xmlDomDoc->formatOutput = true;
         $xmlDomDoc->loadXML($this->xml->saveXML());
@@ -156,9 +158,8 @@ class S100GmlPrinter
      * This is an recursive function, creating the GML- structure as a SimpleXML- document
      * @param ArrayObject $attributes array of the calling "parent"
      * @param SimpleXMLElement $parentNode the XML- node of the calling "parent"
-     * @param string $gmlId GML ID of the parent node for easy access. NULL if parent is a Complex Attribute
      */
-    function printObject($attributes, $parentNode, $parentGmlId)
+    function printObject($attributes, $parentNode)
     {
        //iterate all attributes (as specified in the PS)
         foreach($attributes as $attribute)
@@ -206,6 +207,17 @@ class S100GmlPrinter
     }
     
     /**
+     * Strip namespace from classname before using as tag
+     * @param string $classWithNs
+     * @return string
+     */
+    private function tagNameByClass($classWithNs)
+    {
+        $pos = strrpos($classWithNs, '\\');
+        return substr($classWithNs, $pos+1);
+    }
+    
+    /**
      * Print a Feature or Information type
      * @param SimpleXMLElement $parentNode
      * @param array $attribute
@@ -241,7 +253,7 @@ class S100GmlPrinter
             
             $memberNamespace = $this->useProductNsOnMemberTags ? $this->productNs : $this->defaultNs;
             
-            $node = $newParentNode->addChild(get_class($instance), null,  $memberNamespace); // get the type of the object
+            $node = $newParentNode->addChild($this->tagNameByClass(get_class($instance)), null,  $memberNamespace); // get the type of the object
             
             $node->addAttribute('gml:id', $instance->gmlId, $this->gmlNs);
             
@@ -326,9 +338,10 @@ class S100GmlPrinter
         //If instance is further a FeatureType or InformationType, it shall be included asa new <imember> with references;
         
         //else
+        
         {
             //add the content of a ComplexAttribute instead of a reference
-            $node = $parentNode->addChild(get_class($instance), null, $this->defaultNs); // get the type of the object
+            $node = $parentNode->addChild($this->tagNameByClass(get_class($instance)), null, $this->defaultNs); // get the type of the object
             
             //ADD COMPLEX ATTRIBUTES with GML-ID set to null
             $this->printObject($instance->getAllAttributes(), $node, null); //pass node as parent to children
@@ -344,7 +357,7 @@ class S100GmlPrinter
     private function printSimple($parentNode, $instance)
     {
         //Add the value of a Geometry
-        if (get_class($instance) == 'Geometry')
+        if (get_class($instance) == 'fiho\\s100\\Geometry')
         {
             $this->printGeometry($parentNode, $instance); //print value in node
             
@@ -352,7 +365,7 @@ class S100GmlPrinter
         else
         {
             //Add the value of a SimpleAttribute
-            $parentNode->addChild(get_class($instance), $instance->oPrint(), $this->defaultNs); //print value in node
+            $parentNode->addChild($this->tagNameByClass(get_class($instance)), $instance->oPrint(), $this->defaultNs); //print value in node
         }
     }
     /**
