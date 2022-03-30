@@ -1,4 +1,6 @@
 <?php
+namespace fiho\s100\testS122;
+use fiho\s100\S100GmlPrinter;
 /*
  * Minimalist S122 MPA edition 1.0
 */
@@ -8,7 +10,6 @@ include 'ApplicationSchemaS122.php';
 
 //add printer
 define ( 'PRINT_PATH', '../../print/');
-include (PRINT_PATH.'S100GmlPrinter.php');
 
 //Create the dataset
 $s122 = new S122MarineProtectedAreas();

@@ -54,11 +54,13 @@ abstract class AbstractType extends ComplexAttributeType
     {
         $name = $associationClass.'_'.$role.'_'.$associatedType; //create name
         
-        $nsRole = 'fiho\\s100\\'.$role;
+        $ns = 'fiho\\s100\\'.CURRENT_PS.'\\';
+        $nsRole = $ns.$role;
         $this->role = new $nsRole; //instantiate the role for test
         
-        $nsAssoc = 'fiho\\s100\\'.$associationClass;
-        $assoc = new $nsAssoc;
+        $nsAssociationClass = $ns.$associationClass;
+        $assoc = new $nsAssociationClass;
+        
         //IF Association has attributes, use linking
         if ($assoc->hasAttributes())
         {

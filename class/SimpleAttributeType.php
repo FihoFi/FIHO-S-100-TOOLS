@@ -57,6 +57,7 @@ abstract class SimpleAttributeType extends CommonS100Type
         else
         {
             throw(new Exception("Illegal simple value"));
+           
         }
     }
     

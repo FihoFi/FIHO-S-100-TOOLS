@@ -146,8 +146,10 @@ abstract class ComplexAttributeType extends CommonS100Type
         
         $type = ($type == null) ? $name : $type;
         
-        $type = 'fiho\\s100\\'.$type;
-        
+        //Use Geometry from fiho/s100
+        $ns =( $type == 'Geometry' ||  $type == 'AbstractFeatureType') ? 'fiho\\s100\\' : 'fiho\\s100\\'.CURRENT_PS.'\\';
+        $type = $ns.$type;
+         
          //XXX Recursive object- creation uses too much resources.
          //Validate the object as Simple or Complex type
         //if (!new $type() instanceOf SimpleAttributeType && !new $type() instanceOf ComplexAttributeType)

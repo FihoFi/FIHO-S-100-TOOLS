@@ -25,8 +25,6 @@
 ***************************************************************************
 */
 
-namespace fiho\s100
-{
 /*
  * Validation functions for the different ValueTypes. These functions can be called in the individual SimpleType::validate($value) function
  */
@@ -78,6 +76,5 @@ function is_S100_TruncatedDate($value)
 {
     //XXX accept any string
     return is_string($value);
-}
 }
 ?>
