@@ -19,7 +19,7 @@ $mpa->categoryOfMarineProtectedArea = new categoryOfMarineProtectedArea(4);
 $mpa->jurisdiction = new jurisdiction(2);
 
 //print GML
-$printer = new S100GmlPrinter($s122);
+$printer = new S100GmlPrinter($s122, 'S122');
 $xml = $printer->printGml();
 
 //output to screen
