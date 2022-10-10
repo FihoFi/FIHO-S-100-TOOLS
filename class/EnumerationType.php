@@ -35,6 +35,7 @@ abstract class EnumerationType extends SimpleAttributeType
 {
 	protected $enum = array();
 	protected $description = null; //additional to value (key), enumerations hold the description
+	protected $code = null; //the code of the current value
 	
 	public function __construct($value)
 	{
@@ -55,6 +56,7 @@ abstract class EnumerationType extends SimpleAttributeType
 	        if ($value == $k)
 	        {
 	            $this->description = $v; //set current description 
+	            $this->code = $k; //the current code
 	            return true;
 	        }
 	    }
@@ -67,6 +69,15 @@ abstract class EnumerationType extends SimpleAttributeType
 	public function oPrint()
 	{
 	    return $this->description;
+	}
+	
+	/**
+	 * Print the code of enumeration as needed by IHO S-100 5.0.0
+	 * @return unknown
+	 */
+	public function cPrint()
+	{
+	    return $this->code;
 	}
 }
 }

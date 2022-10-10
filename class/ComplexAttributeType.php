@@ -179,7 +179,7 @@ abstract class ComplexAttributeType extends CommonS100Type
      * @throws Exception
      * @return array
      */
-    public function getAllAttributes()
+    public function getAllAttributes($validate = true)
     {
        //Reorder such that Geometry goes last
        if (isset($this->attributes['Geometry']))
@@ -188,6 +188,10 @@ abstract class ComplexAttributeType extends CommonS100Type
            $this->attributes['Geometry'] = $geometry; // add as last item
        }
        
+        if ($validate == false)
+        {
+            return $this->attributes;
+        }
         
         //Iterate all attributes in current instance
         foreach($this->attributes as $attribute)

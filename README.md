@@ -42,7 +42,7 @@ The resource directory holds the XSLT- translation script that is used to tarnsl
 Currently this directory holds a single class: S100GMLPrinter. The class accepts a $rootClass - parameter, which should refer to a CommonS100Type- class. The output is a GML- document. 
 
 ## Structure of the classes in directory 'example'
-This directory holds a working sample, using the S-127 Feature catalogue. 
+This directory holds a working sample, using the S-122 Feature catalogue. 
 
 ## Notes on the current version
 * Geometry supports input of WKT: LINESTRING (Line), POLYGON (Surface) and POINT (Point)
@@ -52,10 +52,11 @@ This directory holds a working sample, using the S-127 Feature catalogue.
 For associations without attributes (most associations), the associated Feature- / InformationTypes are simply added as normal attributes, and GML- references are printed between those.
 
 ### Associations with attributes (indirect references)
-Associations with attributes needs to be "wrapped" in the correct AssociationClass. The AssociationClass must then also be printed to GML. The AssociationClass is added as an attribute, and the associated Feature- / InformationType is put in a public property **associatedType** of the AssociationClass. The constructor of the AbstractType holds the logic for determining if the AssociationClass "wrapper" is needed. NOTE! There is currently (january 2020) no type- checking according to the FC implemented for the indirect references. The needed AssociationClass "wrapper" is also not displayed in the PHPDoc- documentation. 
+Associations with attributes needs to be "wrapped" in the correct AssociationClass. The AssociationClass must then also somehow be printed to GML. The AssociationClass is added as an attribute, and the associated Feature- / InformationType is put in a public property **associatedType** of the AssociationClass. 
+
+The constructor of the AbstractType holds the logic for determining if the AssociationClass "wrapper" is needed. NOTE! There is currently (09/2022) no type- checking according to the FC implemented for the indirect references. The needed AssociationClass "wrapper" is also not displayed in the PHPDoc- documentation.
+GML-printer is updated to print Associations with attributes according to S-100 5.0.0. part 10.b. 
 
 ## Author
 Stefan Engström /stefan.engstrom@traficom.fi
 
-## Version 0.0.1
-TBD

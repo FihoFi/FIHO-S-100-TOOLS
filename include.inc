@@ -20,4 +20,7 @@ include (FIHO_TOOLS_CLASS_PATH.'valueTypeValidation.php');
 include (FIHO_TOOLS_CLASS_PATH.'Exception.php');
 
 include (FIHO_TOOLS_PRINT_PATH.'S100GmlPrinter.php');
+//new printer for S-100 GML 5.0.0
+include (FIHO_TOOLS_PRINT_PATH.'S100GmlPrinter_500.php');
+
 ?>
